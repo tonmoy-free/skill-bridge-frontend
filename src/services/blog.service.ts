@@ -1,5 +1,4 @@
-import { env } from "@/env"
-import { error } from "console";
+import { env } from "@/env" 
 
 
 const API_URL = env.API_URL;
