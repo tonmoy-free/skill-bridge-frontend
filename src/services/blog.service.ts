@@ -54,5 +54,19 @@ export const blogService = {
         } catch (err) {
             return { data: null, error: { message: "Something went wrong." } }
         }
+    },
+
+    getTutorById: async function (id: string) {
+    try {
+      const res = await fetch(`${API_URL}/tutors/tutors-profile/${id}`);
+
+      const data = await res.json();
+
+      return { data: data, error: null };
+    } catch (err) {
+      return { data: null, error: { message: "Something Went Wrong" } };
     }
-}
+  },
+
+
+};
