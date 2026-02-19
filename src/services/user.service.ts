@@ -1,5 +1,4 @@
 import { env } from "@/env";
-import { error } from "console";
 import { cookies } from "next/headers";
 
 const AUTH_URL = env.AUTH_URL;

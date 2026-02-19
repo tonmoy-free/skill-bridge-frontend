@@ -9,9 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { TutorProfile } from "@/types"
+import Link from "next/link"
 
 
-export function TutorCard() {
+export function TutorCard({ post }: { post: TutorProfile }) {
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">
       <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
@@ -22,16 +24,25 @@ export function TutorCard() {
       />
       <CardHeader>
         <CardAction>
-          <Badge variant="secondary">Featured</Badge>
+          {/* {post.isFeatured && (
+            <Badge
+              variant="default"
+              className="bg-yellow-500 hover:bg-yellow-600"
+            >
+              Featured
+            </Badge> */}
         </CardAction>
-        <CardTitle>Design systems meetup</CardTitle>
+        <CardTitle>{post.user?.name}</CardTitle>
         <CardDescription>
-          A practical talk on component APIs, accessibility, and shipping
-          faster.
+          {post.bio}
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full">View Event</Button>
+        <Button className="w-full">
+          <Link href={`/tutors/${post.id}`}>
+            See More
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   )
