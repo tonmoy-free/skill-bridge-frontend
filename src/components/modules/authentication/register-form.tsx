@@ -12,13 +12,33 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { useForm } from "@tanstack/react-form"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
+import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
+import z from "zod";
+
+const formSchema = z.object({
+  name: z.string().min(1, "This field is required"),
+  password: z.string().min(8, "MInimum Length is 8"),
+  email: z.email(),
+})
+
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
+
+  const handleGoogleLogin = async () => {
+    const data = authClient.signIn.social({
+      provider: "google",
+      callbackURL: "http://localhost:3000/"
+    });
+
+    console.log(data);
+  };
 
   const form = useForm({
     defaultValues: {
@@ -26,8 +46,23 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
       email: "",
       password: "",
     },
+    validators: {
+      onSubmit: formSchema,
+    },
     onSubmit: async ({ value }) => {
-      console.log(value);
+      const toastId = toast.loading("Creating User");
+      try {
+        const { data, error } = await authClient.signUp.email(value);
+
+        if (error) {
+          toast.error(error.message, { id: toastId })
+          return;
+        }
+
+        toast.success("User created successfully", { id: toastId });
+      } catch (err) {
+        toast.error("Internal server error", { id: toastId });
+      }
     }
   })
 
@@ -48,6 +83,8 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
           }}>
           <FieldGroup>
             <form.Field name="email" children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (<Field>
                 <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
@@ -56,10 +93,16 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                   name={field.name}
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)} />
+
+                {isInvalid && (
+                  <FieldError errors={field.state.meta.errors} />
+                )}
               </Field>)
             }} />
 
             <form.Field name="name" children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (<Field>
                 <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                 <Input
@@ -68,11 +111,17 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                   name={field.name}
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)} />
+
+                {isInvalid && (
+                  <FieldError errors={field.state.meta.errors} />
+                )}
               </Field>)
             }} />
 
             <form.Field name="password" children={(field) => {
-              return (<Field>
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (<Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                 <Input
                   type="password"
@@ -80,14 +129,23 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                   name={field.name}
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)} />
+
+                {isInvalid && (
+                  <FieldError errors={field.state.meta.errors} />
+                )}
               </Field>)
             }} />
           </FieldGroup>
 
         </form>
       </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button form="login-form" type="submit">Submit</Button>
+      <CardFooter className="flex justify-end flex-col gap-5">
+        <Button form="login-form" type="submit" className="w-full">Register</Button>
+        <Button
+          onClick={() => handleGoogleLogin()}
+          variant="outline" type="button" className="w-full">
+          Login with Google
+        </Button>
       </CardFooter>
     </Card>
   )
