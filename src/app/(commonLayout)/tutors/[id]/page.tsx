@@ -5,11 +5,12 @@ import { blogService } from "@/services/blog.service";
 import { TutorProfile } from "@/types";
 import { notFound } from "next/navigation";
 
-// export async function generateStaticParams() {
-//   const { data } = await blogService.getBlogPosts();
+export async function generateStaticParams() {
+    const { data } = await blogService.getBlogPosts();
 
-//   return data?.data?.map((blog: TutorProfile) => ({ id: blog.id })).splice(0, 3);
-// }
+
+    return data?.map((blog: TutorProfile) => ({ id: blog.id })).splice(0, 3);
+}
 
 export default async function TutorProfileSinglePage({ params }: { params: Promise<{ id: string }>; }) {
 
