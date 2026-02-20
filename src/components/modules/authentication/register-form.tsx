@@ -27,7 +27,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
       password: "",
     },
     onSubmit: async ({ value }) => {
-      console.log("clicked");
+      console.log(value);
     }
   })
 
@@ -47,7 +47,41 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
             form.handleSubmit();
           }}>
           <FieldGroup>
-            <form.Field name="name" children={() => <Field></Field>} />
+            <form.Field name="email" children={(field) => {
+              return (<Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                <Input
+                  type="email"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)} />
+              </Field>)
+            }} />
+
+            <form.Field name="name" children={(field) => {
+              return (<Field>
+                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                <Input
+                  type="text"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)} />
+              </Field>)
+            }} />
+
+            <form.Field name="password" children={(field) => {
+              return (<Field>
+                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                <Input
+                  type="password"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)} />
+              </Field>)
+            }} />
           </FieldGroup>
 
         </form>
