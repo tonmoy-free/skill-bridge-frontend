@@ -7,6 +7,10 @@ export const adminRoutes: Route[] = [
       {
         title: "Analytics",
         url: "/analytics",
+      },
+      {
+        title: "Create Classs",
+        url: "/admin-dashboard/create-class",
       }
     ],
   },
