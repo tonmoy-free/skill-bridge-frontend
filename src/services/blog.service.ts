@@ -41,7 +41,15 @@ export const blogService = {
                 config.next = { revalidate: options.revalidate }
             }
 
+            config.next = { ...config.next, tags: ["blogPosts"] };
+
             const res = await fetch(url.toString(), config);
+
+            // const res = await fetch(url.toString(), {
+            //     next: {
+            //         tags: ["blogPosts"],
+            //     }
+            // });
 
             const data = await res.json();
 
@@ -57,16 +65,16 @@ export const blogService = {
     },
 
     getTutorById: async function (id: string) {
-    try {
-      const res = await fetch(`${API_URL}/tutors/tutors-profile/${id}`);
+        try {
+            const res = await fetch(`${API_URL}/tutors/tutors-profile/${id}`);
 
-      const data = await res.json();
+            const data = await res.json();
 
-      return { data: data, error: null };
-    } catch (err) {
-      return { data: null, error: { message: "Something Went Wrong" } };
-    }
-  },
+            return { data: data, error: null };
+        } catch (err) {
+            return { data: null, error: { message: "Something Went Wrong" } };
+        }
+    },
 
 
 };
