@@ -26,7 +26,7 @@ export default function LogoutPage() {
     };
 
     return (
-        <Button onClick={handleLogout}>
+        <Button onClick={handleLogout} className="cursor-pointer hover:bg-red-600">
             Logout
         </Button>
     );
