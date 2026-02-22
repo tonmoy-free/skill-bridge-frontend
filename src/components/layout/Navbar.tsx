@@ -101,25 +101,17 @@ const Navbar = ({
   session,
 }: Navbar1Props) => {
   return (
-    <section className={cn("py-4", className)}>
-      <div className="container mx-auto px-">
+    // <section className={cn("py-4", className)}>
+    // <div className="container mx-auto">
+    <section className="fixed top-0 left-0 w-full bg-white shadow-sm z-50">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Desktop Menu */}
-        <nav className="hidden items-center justify-between lg:flex">
+        <div className="hidden items-center justify-between w-full lg:flex">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            {/* <a href={logo.url} className="flex items-center gap-2">
-              <img
-                src={logo.src}
-                className="max-h-8 dark:invert"
-                alt={logo.alt}
-              />
-              <span className="text-lg font-semibold tracking-tighter">
-                {logo.title}
-              </span>
-            </a> */}
-            <div className="flex items-center ">
+            <div className="flex items-center">
               <Link href="/"
-              className="outline-none ring-0 focus:outline-none focus:ring-0">
+                className="outline-none ring-0 focus:outline-none focus:ring-0">
                 <Image src={skillbridgeLight} alt="skillbridge" className="w-36 h-6" />
               </Link>
             </div>
@@ -131,7 +123,7 @@ const Navbar = ({
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3 ml-auto">
             <ModeToggle />
 
             {session?.email ? (
@@ -149,26 +141,22 @@ const Navbar = ({
             )}
 
           </div>
-        </nav>
+        </div>
 
         {/* Mobile Menu */}
-        <div className="block lg:hidden">
-          <div className="flex items-center justify-between">
+        <div className="block lg:hidden w-full">
+          <div className="flex items-center justify-between w-full">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
-              <img
-                src={logo.src}
-                className="max-h-8 dark:invert"
-                alt={logo.alt}
-              />
-            </a>
+            <Link href="/" className="flex items-center gap-2">
+              <Image src={skillbridgeLight} alt="skillbridge" className="w-24 h-5" />
+            </Link>
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
+              <SheetContent side="right" className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
                     <Link href={logo.url} className="flex items-center gap-2">

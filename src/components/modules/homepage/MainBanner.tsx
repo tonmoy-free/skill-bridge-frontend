@@ -38,7 +38,7 @@ export default function MainBanner() {
                         </div>
                         <div className="flex justify-start items-center gap-2 ">
                             <p className="font-medium text-xl">Trending:</p>
-                            <p className="w-[370px] overflow-hidden 
+                            <div className="w-[370px] overflow-hidden 
 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
                                 <Marquee speed={45}>
                                     <div className="flex gap-1.5">
@@ -53,7 +53,7 @@ export default function MainBanner() {
                                         </p>
                                     </div>
                                 </Marquee>
-                            </p>
+                            </div>
                         </div>
                     </div>
                     <div className="button flex gap-5 ">
