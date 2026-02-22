@@ -9,13 +9,20 @@ export default function LogoutPage() {
     const router = useRouter();
 
     const handleLogout = async () => {
-        await authClient.signOut();
+        try {
+            // Sign out first so server-side session is cleared
+            await authClient.signOut();
 
-        router.refresh(); // 🔥 আগে refresh
+            // Show feedback and navigate to login page
+            toast.success("User logged out");
+            await router.push("/login");
 
-        toast.success("User logout successfully");
-
-        router.push("/login");
+            // Refresh server components to reflect new session state
+            router.refresh();
+        } catch (error) {
+            toast.error("Logout failed");
+            console.error(error);
+        }
     };
 
     return (
