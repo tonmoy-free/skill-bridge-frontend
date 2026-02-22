@@ -55,7 +55,7 @@ export default function CreateClassForServer() {
 return (
     <Card className="max-w-2xl mx-auto">
         <CardHeader>
-            <CardTitle>Create Blog</CardTitle>
+            <CardTitle>Create Class Name</CardTitle>
             <CardDescription>You can write your Class name</CardDescription>
         </CardHeader>
         <CardContent>

@@ -9,22 +9,18 @@ export default function LogoutPage() {
     const router = useRouter();
 
     const handleLogout = async () => {
-        try {
-            await authClient.signOut();
+        await authClient.signOut();
 
-            toast.success("User logout successfully");
+        router.refresh(); // 🔥 আগে refresh
 
-            router.push("/login"); // redirect
-        } catch (error) {
-            toast.error("Logout failed");
-        }
+        toast.success("User logout successfully");
+
+        router.push("/login");
     };
 
     return (
-        <div>
-            <Button type="button" onClick={handleLogout}>
-                Logout
-            </Button>
-        </div>
+        <Button onClick={handleLogout}>
+            Logout
+        </Button>
     );
 }

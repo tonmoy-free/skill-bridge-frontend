@@ -1,9 +1,19 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { userService } from "@/services/user.service";
 
-export default function CommonLayout({children}: {children: React.ReactNode}) {
+export const dynamic = "force-dynamic";
+
+export default async function CommonLayout({ children }: { children: React.ReactNode }) {
+
+  const { data } = await userService.getSession();
+
+  const session = data?.user || null;
+
+  // console.log("from navbar",data)
+
   return (
     <div>
-        <Navbar />
+      <Navbar  session={session}/>
       {children}
     </div>
   );

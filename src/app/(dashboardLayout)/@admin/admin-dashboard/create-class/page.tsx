@@ -3,7 +3,7 @@ import { blogService } from "@/services/blog.service";
 import { TutorProfile } from "@/types";
 
 export default async function CreateClassPage() {
-    const { data } = await blogService.getBlogPosts();
+    const { data } = await blogService.getBlogPosts({}, {cache: "no-store"});
 
     return (
         <div>

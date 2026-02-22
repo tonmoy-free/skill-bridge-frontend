@@ -1,8 +1,11 @@
-"use client";
+// "use client";
 
-import {  Menu, } from "lucide-react";
+import { Menu, } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import skillbridgeDarkLogo from "../../../public/Logo/skillbridgeDark.png";
+import skillbridgeLight from "../../../public/Logo/skillbridgeLight.png";
+import logoMet from "../../../public/Logo/logo.png";
 
 import {
   Accordion,
@@ -25,6 +28,9 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
+import LogoutPage from "@/app/(commonLayout)/logout/page";
+import { userService } from "@/services/user.service";
+import Image from "next/image";
 
 interface MenuItem {
   title: string;
@@ -32,6 +38,12 @@ interface MenuItem {
   description?: string;
   icon?: React.ReactNode;
   items?: MenuItem[];
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
 }
 
 interface Navbar1Props {
@@ -54,7 +66,9 @@ interface Navbar1Props {
       url: string;
     };
   };
+  session?: User;
 }
+
 
 const Navbar = ({
   logo = {
@@ -77,26 +91,23 @@ const Navbar = ({
       title: "Dashboard",
       url: "/dashboard",
     },
-    {
-      title: "Logout",
-      url: "/logout",
-    },
-    
+
   ],
   auth = {
     login: { title: "Login", url: "/login" },
     signup: { title: "Register", url: "/register" },
   },
   className,
+  session,
 }: Navbar1Props) => {
   return (
     <section className={cn("py-4", className)}>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            {/* <a href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
                 className="max-h-8 dark:invert"
@@ -105,7 +116,13 @@ const Navbar = ({
               <span className="text-lg font-semibold tracking-tighter">
                 {logo.title}
               </span>
-            </a>
+            </a> */}
+            <div className="flex items-center ">
+              <Link href="/"
+              className="outline-none ring-0 focus:outline-none focus:ring-0">
+                <Image src={skillbridgeLight} alt="skillbridge" className="w-36 h-6" />
+              </Link>
+            </div>
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -116,12 +133,21 @@ const Navbar = ({
           </div>
           <div className="flex gap-2">
             <ModeToggle />
-            <Button asChild variant="outline" size="sm">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+
+            {session?.email ? (
+              <LogoutPage />
+            ) : (
+              <>
+                <Button asChild variant="outline" size="sm">
+                  <Link href={auth.login.url}>{auth.login.title}</Link>
+                </Button>
+
+                <Button asChild variant="outline" size="sm">
+                  <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                </Button>
+              </>
+            )}
+
           </div>
         </nav>
 
@@ -177,8 +203,8 @@ const Navbar = ({
             </Sheet>
           </div>
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 };
 
