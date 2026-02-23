@@ -13,7 +13,7 @@ export default async function CommonLayout({ children }: { children: React.React
 
   return (
     <div>
-      <Navbar  session={session}/>
+      {/* <Navbar  session={session}/> */}
       {children}
     </div>
   );

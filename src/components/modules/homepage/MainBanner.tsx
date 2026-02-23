@@ -13,7 +13,7 @@ export default function MainBanner() {
     return (
         <div className="bg-amber-200">
             <div className=" w-full  h-170 flex items-center justify-between container mx-auto pl-4 ">
-                <div className=" flex-1 ">
+                <div className=" flex-1 md:w-full w-[40%]">
                     <div>
                         <h1 className="md:text-5xl font-extrabold text-3xl">The Nation's Largest <br /> Network for <br />  Tutors.</h1>
                         <h1 className="md:text-3xl font-bold pt-3 pb-3 text-xl">
@@ -30,17 +30,17 @@ export default function MainBanner() {
                                 }}
                             />
                         </h1>
-                        <p className="font-medium md:w-full w-[40%]">Individualized, one-on-one instructional sessions with a highly qualified instructor of your selection. Meet online or in person.</p>
+                        <p className="font-medium md:w-full w-[80%]">Individualized, one-on-one instructional sessions with a highly qualified instructor of your selection. Meet online or in person.</p>
                     </div>
                     <div className="pt-3 pb-6 flex items-center justify-start gap-2">
                         <div>
                             <FaArrowTrendUp className="text-xl" />
                         </div>
-                        <div className="flex justify-start items-center gap-2 ">
-                            <p className="font-medium text-xl">Trending:</p>
-                            <div className="md:w-[370px] w-[25%]  overflow-hidden 
-[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-                                <Marquee speed={45}>
+                        <div className="flex justify-start items-center gap-2 md:w-full w-[80%]">
+                            <p className="font-medium text-xl bor">Trending:</p>
+                            <div className="md:w-[370px]   overflow-hidden 
+[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] ">
+                                <Marquee speed={45} >
                                     <div className="flex gap-1.5">
                                         <p className="pt-1 pb-1 pl-2 pr-2 text-[11px] font-medium bg-white rounded-full">Accounting</p>
                                         <p className="pt-1 pb-1 pl-2 pr-2 text-[11px] font-medium bg-white rounded-full">English</p>
