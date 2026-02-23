@@ -6,6 +6,7 @@ import skillbridgeLight from "../../../public/Logo/skillbridgeLight.png";
 import Link from "next/link";
 import Image from "next/image";
 import MainBanner from "@/components/modules/homepage/MainBanner";
+import { Footer2 } from "@/components/modules/homepage/Footer";
 
 
 
@@ -34,6 +35,10 @@ export default async function Home() {
             <TutorCard key={post.id} post={post} />
           ))}
         </div>
+      </div>
+
+      <div>
+        <Footer2 />
       </div>
 
     </div>
