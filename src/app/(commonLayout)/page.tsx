@@ -10,6 +10,8 @@ import { Footer2 } from "@/components/modules/homepage/Footer";
 import Accordion from "@/components/modules/homepage/Accordion";
 import { AccordionDemo } from "@/components/modules/homepage/AccordionDemo";
 import Faq from "@/components/modules/homepage/Faq";
+import TutorYouWillLove from "@/components/modules/homepage/TutorYouWillLove";
+import StartTutoringWithUs from "@/components/modules/homepage/StartTutoringWithUs";
 
 
 
@@ -40,9 +42,14 @@ export default async function Home() {
         </div>
       </div>
       <div>
+        <StartTutoringWithUs />
+      </div>
+      <div>
         <Faq />
       </div>
-
+      <div>
+        <TutorYouWillLove />
+      </div>
       <div>
         <Footer2 />
       </div>
