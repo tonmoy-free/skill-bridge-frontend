@@ -12,6 +12,8 @@ import { AccordionDemo } from "@/components/modules/homepage/AccordionDemo";
 import Faq from "@/components/modules/homepage/Faq";
 import TutorYouWillLove from "@/components/modules/homepage/TutorYouWillLove";
 import StartTutoringWithUs from "@/components/modules/homepage/StartTutoringWithUs";
+import { TestimonialSlider } from "@/components/modules/homepage/TestimonialSlider";
+import FeaturedTeachers from "@/components/modules/homepage/FeaturedTeachers";
 
 
 
@@ -35,6 +37,9 @@ export default async function Home() {
         <MainBanner></MainBanner>
       </div>
       <div>
+        <FeaturedTeachers />
+      </div>
+      <div>
         <div className="grid grid-cols-3 max-w-7xl mx-auto px-4 gap-5">
           {data?.map((post: TutorProfile) => (
             <TutorCard key={post.id} post={post} />
@@ -49,6 +54,9 @@ export default async function Home() {
       </div>
       <div>
         <TutorYouWillLove />
+      </div>
+      <div>
+        <TestimonialSlider />
       </div>
       <div>
         <Footer2 />
