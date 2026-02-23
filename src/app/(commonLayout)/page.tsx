@@ -14,6 +14,7 @@ import TutorYouWillLove from "@/components/modules/homepage/TutorYouWillLove";
 import StartTutoringWithUs from "@/components/modules/homepage/StartTutoringWithUs";
 import { TestimonialSlider } from "@/components/modules/homepage/TestimonialSlider";
 import FeaturedTeachers from "@/components/modules/homepage/FeaturedTeachers";
+import ProTutorsSlider from "@/components/modules/homepage/ProTutorsSlider";
 
 
 
@@ -57,6 +58,9 @@ export default async function Home() {
       </div>
       <div>
         <TestimonialSlider />
+      </div>
+      <div>
+        <ProTutorsSlider />
       </div>
       <div>
         <Footer2 />
