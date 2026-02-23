@@ -12,11 +12,11 @@ import Marquee from "react-fast-marquee";
 export default function MainBanner() {
     return (
         <div className="bg-amber-200">
-            <div className=" w-full  h-170 flex items-center justify-between container mx-auto">
+            <div className=" w-full  h-170 flex items-center justify-between container mx-auto pl-4 ">
                 <div className=" flex-1 ">
                     <div>
-                        <h1 className="text-5xl font-extrabold">The Nation's Largest <br /> Network for <br />  Tutors.</h1>
-                        <h1 className="text-3xl font-bold pt-3 pb-3">
+                        <h1 className="md:text-5xl font-extrabold text-3xl">The Nation's Largest <br /> Network for <br />  Tutors.</h1>
+                        <h1 className="md:text-3xl font-bold pt-3 pb-3 text-xl">
                             <Typewriter
                                 options={{
                                     strings: [
@@ -30,7 +30,7 @@ export default function MainBanner() {
                                 }}
                             />
                         </h1>
-                        <p className="font-medium">Individualized, one-on-one instructional sessions with a highly qualified instructor of your selection. Meet online or in person.</p>
+                        <p className="font-medium md:w-full w-[40%]">Individualized, one-on-one instructional sessions with a highly qualified instructor of your selection. Meet online or in person.</p>
                     </div>
                     <div className="pt-3 pb-6 flex items-center justify-start gap-2">
                         <div>
@@ -38,7 +38,7 @@ export default function MainBanner() {
                         </div>
                         <div className="flex justify-start items-center gap-2 ">
                             <p className="font-medium text-xl">Trending:</p>
-                            <div className="w-[370px] overflow-hidden 
+                            <div className="md:w-[370px] w-[25%]  overflow-hidden 
 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
                                 <Marquee speed={45}>
                                     <div className="flex gap-1.5">
@@ -57,11 +57,11 @@ export default function MainBanner() {
                         </div>
                     </div>
                     <div className="button flex gap-5 ">
-                        <button className="w-67.5 h-15 border-black border-2 rounded-md text-2xl font-bold cursor-pointer hover:bg-white hover:text-[25px] transition-all duration-500  ease-in-out">Find Tutors</button>
-                        <button className="w-67.5 h-15 border-black border-2 rounded-md text-2xl font-bold cursor-pointer hover:bg-white hover:text-[25px] transition-all duration-500  ease-in-out">Request For Tutors</button>
+                        <button className="md:w-67.5 w-40 h-10 md:h-15 border-black border-2 rounded-md md:text-2xl text-[15px] font-bold cursor-pointer hover:bg-white md:hover:text-[25px] hover:text-[16px] transition-all duration-500  ease-in-out">Find Tutors</button>
+                        <button className="md:w-67.5 w-40 h-10 md:h-15 border-black border-2 rounded-md md:text-2xl text-[15px] font-bold cursor-pointer hover:bg-white md:hover:text-[25px] hover:text-[16px] transition-all duration-500  ease-in-out">Request For Tutors</button>
                     </div>
                 </div>
-                <div className=" flex-1">
+                <div className=" flex-1 hidden lg:block">
                     <Lottie className='ml-55 hidden lg:block' style={{ width: '700px' }} animationData={teacher} loop={true}></Lottie>
                 </div>
 
