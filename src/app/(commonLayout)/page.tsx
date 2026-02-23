@@ -7,6 +7,9 @@ import Link from "next/link";
 import Image from "next/image";
 import MainBanner from "@/components/modules/homepage/MainBanner";
 import { Footer2 } from "@/components/modules/homepage/Footer";
+import Accordion from "@/components/modules/homepage/Accordion";
+import { AccordionDemo } from "@/components/modules/homepage/AccordionDemo";
+import Faq from "@/components/modules/homepage/Faq";
 
 
 
@@ -35,6 +38,9 @@ export default async function Home() {
             <TutorCard key={post.id} post={post} />
           ))}
         </div>
+      </div>
+      <div>
+        <Faq />
       </div>
 
       <div>
