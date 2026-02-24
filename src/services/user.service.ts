@@ -1,11 +1,14 @@
 import { env } from "@/env";
-import { cookies } from "next/headers";
 
 const AUTH_URL = env.AUTH_URL;
 
 export const userService = {
     getSession: async function () {
         try {
+            // This function should be called from server components only
+            // so we dynamically import `cookies` to avoid bundling it into client code
+            const { cookies } = await import("next/headers");
+
             const cookiestore = await cookies();
 
             const res = await fetch(`${AUTH_URL}/get-session`, {
