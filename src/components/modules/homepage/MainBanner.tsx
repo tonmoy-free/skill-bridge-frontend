@@ -6,13 +6,16 @@ import Lottie from "lottie-react";
 import Typewriter from "typewriter-effect";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import Marquee from "react-fast-marquee";
+import verifiedTutorIcon from "../.././../../public/Image/verifiedTutorIcon.png";
+import tutionIcon from "../.././../../public/Image/tutionIcon.png";
+import tutionMatched from "../.././../../public/Image/tutionMatched.png";
 
 
 
 export default function MainBanner() {
     return (
         <div className="bg-amber-200">
-            <div className=" w-full  h-170 flex items-center justify-between container mx-auto pl-4 ">
+            <div className="relative w-full  h-170 flex items-center justify-between container mx-auto pl-4 ">
                 <div className=" flex-1 md:w-full w-[40%]">
                     <div>
                         <h1 className="md:text-5xl font-extrabold text-3xl">The Nation's Largest <br /> Network for <br />  Tutors.</h1>
@@ -63,6 +66,56 @@ export default function MainBanner() {
                 </div>
                 <div className=" flex-1 hidden lg:block">
                     <Lottie className='ml-55 hidden lg:block' style={{ width: '700px' }} animationData={teacher} loop={true}></Lottie>
+                </div>
+
+                <div className="absolute hidden -bottom-13 left-50 right-0 w-full overflow-hidden md:flex items-center justify-start gap-10">
+                    <div className="bg-[#e3ffe9] cursor-pointer dark:bg-slate-900 p-4 w-[340px] h-[112px] border-2 rounded-xl flex items-center justify-center gap-5">
+                        <div>
+                            <Image
+                                src={verifiedTutorIcon}
+                                alt="1"
+                                width={60}
+                                height={60}
+                                className="object-cover"
+                            />
+                        </div>
+                        <div>
+                            <p className="text-slate-900 text-2xl dark:text-white font-bold">Tutor</p>
+                            <p className="text-slate-900 dark:text-white font-medium">32.2K Verified Tutors</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-[#deedff] cursor-pointer dark:bg-slate-900 p-4 w-[340px] h-[112px] border-2 rounded-xl flex items-center justify-center gap-5">
+                        <div>
+                            <Image
+                                src={tutionIcon}
+                                alt="1"
+                                width={60}
+                                height={60}
+                                className="object-cover"
+                            />
+                        </div>
+                        <div>
+                            <p className="text-slate-900 text-2xl dark:text-white font-bold">Tuitions</p>
+                            <p className="text-slate-900 dark:text-white font-medium">24/7 Available Tution</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-[#fbf7c6] cursor-pointer dark:bg-slate-900 p-4 w-[340px] h-[112px] border-2 rounded-xl flex items-center justify-center gap-5">
+                        <div>
+                            <Image
+                                src={tutionMatched}
+                                alt="1"
+                                width={60}
+                                height={60}
+                                className="object-cover"
+                            />
+                        </div>
+                        <div>
+                            <p className="text-slate-900 text-2xl dark:text-white font-bold">Tutions Matched</p>
+                            <p className="text-slate-900 dark:text-white font-medium">2,076 Tution Confirmed.</p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
