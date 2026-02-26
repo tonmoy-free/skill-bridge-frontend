@@ -11,7 +11,16 @@ export const userRoutes: Route[] = [
       {
         title: "View Blogs",
         url: "/view-blogs",
-      }
+      },
+    ],
+  },
+  {
+    title: "Home",
+    items: [
+      {
+        title: "Home",
+        url: "/",
+      },
     ],
   },
 ];
