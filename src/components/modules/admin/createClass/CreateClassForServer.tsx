@@ -69,7 +69,7 @@ return (
             </form>
         </CardContent>
         <CardFooter>
-            <Button form="class-form" type="submit" className="w-full">Submit</Button>
+            <Button  form="class-form" type="submit" className="w-full">Submit</Button>
         </CardFooter>
         <CreateClassToast />
     </Card>

@@ -2,6 +2,7 @@
 
 import { deleteClassById, getAllClass } from '@/actions/class.action';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
@@ -12,19 +13,21 @@ export type Class = {
     updatedAt?: string;
 };
 
-const AllClassTable = () => {
-    // আপনার দেওয়া ডেটা (অ্যারে হিসেবে)
-    // const classesData = [
-    //     {
-    //         "id": "4370e13b-e5af-46d0-93c4-432adf2ddf79",
-    //         "name": "Class 10",
-    //         "createdAt": "2026-01-30T15:20:42.045Z",
-    //         "updatedAt": "2026-01-30T15:20:42.045Z"
-    //     }
-    //     // আরও ডেটা এখানে যোগ করা যাবে
-    // ];
+// প্রপস টাইপ বা ইন্টারফেস আপডেট করুন
+interface AllClassTableProps {
+  urlError?: string; // এটি আগে থেকেই ছিল
+  urlId?: string;    // নতুন এই লাইনটি যোগ করুন
+}
 
-
+const AllClassTable = ({ urlError, urlId }: AllClassTableProps) => {
+    if (urlError) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "class name can't be empty!",
+        });
+        redirect(`/admin-dashboard/all-class/${urlId}`);
+    }
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -72,7 +75,7 @@ const AllClassTable = () => {
         loadClass();
     }, []);
 
-    const handleDelete = (id : any) => {
+    const handleDelete = (id: any) => {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You are about to remove this class!',
@@ -138,7 +141,14 @@ const AllClassTable = () => {
                             <td>{new Date(cls.createdAt).toLocaleDateString()}</td>
                             <td>
                                 <div className="flex gap-2">
-                                    <button className="btn btn-sm btn-outline btn-info">Edit</button>
+                                    <button
+                                        className="btn btn-sm btn-outline btn-info rounded-md"
+                                    // onClick={() => handleEdit(cls.id)}
+                                    >
+                                        <Link href={`/admin-dashboard/all-class/${cls.id}`}>
+                                            Edit
+                                        </Link>
+                                    </button>
                                     {/* <button className="btn btn-sm btn-outline btn-error" onClick={async () => {
                                         const response = await deleteClassById(cls.id, 10);
                                         if (response.error) {
@@ -148,11 +158,10 @@ const AllClassTable = () => {
                                             window.location.reload(); // Reload the page to reflect changes
                                         }
                                     }}> */}
-                                    <button className="btn btn-sm btn-outline btn-error"
+                                    <button
+                                        className="btn btn-sm btn-outline btn-error rounded-md  cursor-pointer"
                                         onClick={() => handleDelete(cls.id)}>
-
                                         Delete
-
                                     </button>
                                 </div>
                             </td>

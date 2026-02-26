@@ -67,8 +67,9 @@ export const classService = {
             const url = `${API_URL}/class/${id}`; // ডাইরেক্ট স্ট্রিং ইন্টারপোলেশন
 
             // Get cookies for authentication
-            const { cookies } = await import("next/headers");
-            const cookiestore = await cookies();
+            const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+            const cookiestore = await cookies(); // Get the cookies store for send login user token or session in header for authentication 
+            
 
             const config: RequestInit = {
                 method: 'DELETE', // <--- এটি অবশ্যই যোগ করতে হবে
