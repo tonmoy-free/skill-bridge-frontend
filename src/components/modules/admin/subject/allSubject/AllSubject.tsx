@@ -1,6 +1,7 @@
 "use client";
 
-import { deleteClassById, getAllClass } from '@/actions/class.action';
+import { deleteClassById } from '@/actions/class.action';
+import { deleteSubjectById, getAllSubject } from '@/actions/subject.action';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -27,7 +28,7 @@ const AllSubjectTable = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await getAllClass();
+                const response = await getAllSubject();
 
                 // ১. এরর হ্যান্ডেলিং
                 if (response.error) {
@@ -70,31 +71,34 @@ const AllSubjectTable = () => {
             confirmButtonColor: '#d33', // ডিলিট বাটনের রঙ লাল করা ভালো
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, delete',
-            cancelButtonText: 'Cancel'
+            cancelButtonText: 'Cancel',
+            showLoaderOnConfirm: true, // কনফার্ম বাটনে ক্লিক করলে লোডার দেখাবে
+            preConfirm: async () => {
+                // এই অংশটি 'Yes, delete' ক্লিক করার পর এবং পপআপ বন্ধ হওয়ার আগে রান হবে
+                try {
+                    const response = await deleteSubjectById(id, 10);
+                    if (response.error) {
+                        throw new Error(response.error.message); // এরর থাকলে ক্যাচ ব্লকে পাঠিয়ে দেবে
+                    }
+                    return response; // সাকসেস হলে রেসপন্স রিটার্ন করবে
+                } catch (error: any) {
+                    Swal.showValidationMessage(`Request failed: ${error.message}`);
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading() // লোডিং অবস্থায় বাইরে ক্লিক করলে যেন বন্ধ না হয়
         }).then(async (result) => { // এখানে async যোগ করা হয়েছে
             if (result.isConfirmed) {
-                try {
-                    // API কল করা হচ্ছে
-                    const response = await deleteClassById(id, 10);
-
-                    console.log(response);
-
-                    if (response.error) {
-                        Swal.fire('Error!', response.error.message, 'error');
-                    } else {
-                        Swal.fire(
-                            'Deleted!',
-                            'The class has been removed.',
-                            'success'
-                        ).then(() => {
-                            // window.location.reload(); // অথবা নিচের লাইন ব্যবহার করে শুধু স্টেট আপডেট করতে পারেন
-                            // Remove the deleted class from the UI state
-                            setClassesData(prev => prev.filter(cls => cls.id !== id));
-                            setTotalClass(prev => prev - 1);
-                        });
-                    }
-                } catch (err) {
-                    Swal.fire('Error!', 'Something went wrong', 'error');
+                if (result.isConfirmed) {
+                    // সাকসেস মেসেজ দেখানো
+                    Swal.fire(
+                        'Deleted!',
+                        'The user has been removed.',
+                        'success'
+                    ).then(() => {
+                        // UI স্টেট আপডেট (অটোমেটিক রিলোড ছাড়া ইউজার লিস্ট থেকে সরিয়ে দেওয়া)
+                        setClassesData(prev => prev.filter(cls => cls.id !== id));
+                        setTotalClass(prev => prev - 1);
+                    });
                 }
             }
         });
@@ -131,7 +135,7 @@ const AllSubjectTable = () => {
                                         className="btn btn-sm btn-outline btn-info rounded-md"
                                     // onClick={() => handleEdit(cls.id)}
                                     >
-                                        <Link href={`/admin-dashboard/all-class/${cls.id}`}>
+                                        <Link href={`/admin-dashboard/all-subject/${cls.id}`}>
                                             Edit
                                         </Link>
                                     </button>
