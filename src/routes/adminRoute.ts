@@ -32,7 +32,15 @@ export const adminRoutes: Route[] = [
       {
         title: "All Classes",
         url: "/admin-dashboard/all-class",
-      }
+      },
+      {
+        title: "All Subjects",
+        url: "/admin-dashboard/all-subject",
+      },
+      {
+        title: "Create Subject",
+        url: "/admin-dashboard/create-subject",
+      },
     ],
   },
 ];
