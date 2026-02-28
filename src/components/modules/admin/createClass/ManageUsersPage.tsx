@@ -35,7 +35,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUsersFromApi } from "@/services/user.client";
 import { AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import Swal from "sweetalert2";
-import { userdeleteById } from "@/actions/manageUser.action";
+import { updateUserRoleStatus, userdeleteById } from "@/actions/manageUser.action";
 
 // Types based on your Prisma Schema
 export type User = {
@@ -43,7 +43,7 @@ export type User = {
   name: string;
   email: string;
   role: "STUDENT" | "TUTOR" | "ADMIN";
-  status: "ACTIVE" | "BLOCKED";
+  status: "ACTIVE" | "BANNED";
   image?: string;
   createdAt: string;
 };
@@ -61,6 +61,7 @@ export default function ManageUsersPage() {
   const [roleDialogOpen, setRoleDialogOpen] = React.useState(false);
   const [selectedUserId, setSelectedUserId] = React.useState<string | null>(null);
   const [selectedRole, setSelectedRole] = React.useState<"STUDENT" | "TUTOR" | "ADMIN">("STUDENT");
+  const [selectedStatus, setSelectedStatus] = React.useState<"ACTIVE" | "BANNED">("ACTIVE");
 
   // Fetch users from server when page changes
   React.useEffect(() => {
@@ -336,15 +337,66 @@ export default function ManageUsersPage() {
       <AlertModal
         isOpen={roleDialogOpen}
         onOpenChange={setRoleDialogOpen}
-        title="Update User Role"
-        description="Select a new role for this user:"
-        actionLabel="Update Role"
+        title="Update User Role & Status"
+        description="Select a new role & status for this user:"
+        actionLabel="Update Role & Status"
         cancelLabel="Cancel"
         onAction={async () => {
           if (selectedUserId) {
+
+            Swal.fire({
+              title: 'Are you sure?',
+              text: 'You are about to update this user!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, update',
+              cancelButtonText: 'Cancel',
+              showLoaderOnConfirm: true, // কনফার্ম বাটনে ক্লিক করলে লোডার দেখাবে
+              preConfirm: async () => {
+                // এই অংশটি 'Yes, delete' ক্লিক করার পর এবং পপআপ বন্ধ হওয়ার আগে রান হবে
+                try {
+                  const response = await updateUserRoleStatus(selectedUserId, { role: selectedRole, status: selectedStatus }, 10);
+                  if (response.error) {
+                    throw new Error(response.error.message); // এরর থাকলে ক্যাচ ব্লকে পাঠিয়ে দেবে
+                  }
+                  return response; // সাকসেস হলে রেসপন্স রিটার্ন করবে
+                } catch (error: any) {
+                  Swal.showValidationMessage(`Request failed: ${error.message}`);
+                }
+              },
+              allowOutsideClick: () => !Swal.isLoading() // লোডিং অবস্থায় বাইরে ক্লিক করলে যেন বন্ধ না হয়
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // সাকসেস মেসেজ দেখানো
+                Swal.fire(
+                  'Updated!',
+                  'User role and status have been updated successfully.',
+                  'success'
+                ).then(() => {
+                  // UI স্টেট আপডেট: ফিল্টার না করে ম্যাপ (map) ব্যবহার করতে হবে
+                  setUsers(prevUsers =>
+                    prevUsers.map(user =>
+                      user.id === selectedUserId
+                        ? { ...user, role: selectedRole, status: selectedStatus } // শুধু আপডেট হওয়া ইউজারের ডেটা পরিবর্তন হবে
+                        : user // বাকি ইউজাররা আগের মতোই থাকবে
+                    )
+                  );
+                });
+              }
+            });
+
+
+
+
+
             // TODO: Implement update role API call
-            console.log("Updating role for user:", selectedUserId, "to:", selectedRole);
-            // await updateUserRoleApi(selectedUserId, selectedRole);
+            // updateUserRoleStatus(selectedUserId, { role: selectedRole, status: selectedStatus }, 10).then((response) => { }).catch((error) => {
+            //   console.error("Failed to update user role/status:", error);
+            // });
+            // console.log("Updating role for user:", selectedUserId, "to:", selectedRole, "and status:", selectedStatus);
+            // // await updateUserRoleApi(selectedUserId, selectedRole);
           }
         }}
       >
@@ -361,6 +413,21 @@ export default function ManageUsersPage() {
             <option value="STUDENT">Student</option>
             <option value="TUTOR">Tutor</option>
             <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+
+        <div className="flex items-center gap-3 mt-4">
+          <label htmlFor="statusSelect" className="text-sm font-medium">
+            Status:
+          </label>
+          <select
+            id="statusSelect"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value as "ACTIVE" | "BANNED")}
+            className="px-3 py-2 rounded border bg-white dark:bg-slate-800 text-sm border-slate-300 dark:border-slate-600"
+          >
+            <option value="ACTIVE">Active</option>
+            <option value="BANNED">Banned</option>
           </select>
         </div>
       </AlertModal>
