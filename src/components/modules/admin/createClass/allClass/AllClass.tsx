@@ -15,16 +15,26 @@ export type Class = {
 
 // প্রপস টাইপ বা ইন্টারফেস আপডেট করুন
 interface AllClassTableProps {
-  urlError?: string; // এটি আগে থেকেই ছিল
-  urlId?: string;    // নতুন এই লাইনটি যোগ করুন
+  urlError?: string; 
+  urlId?: string;    
+  urlSuccess?: string; 
 }
 
-const AllClassTable = ({ urlError, urlId }: AllClassTableProps) => {
+const AllClassTable = ({ urlError, urlId, urlSuccess }: AllClassTableProps) => {
     if (urlError) {
         Swal.fire({
             icon: "error",
             title: "Error",
             text: "class name can't be empty!",
+        });
+        redirect(`/admin-dashboard/all-class/${urlId}`);
+    }
+
+    if (urlSuccess) {
+        Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Class updated successfully!",
         });
         redirect(`/admin-dashboard/all-class/${urlId}`);
     }

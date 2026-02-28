@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import AlertModal from "../manageUser/alertModal";
 import {
   Table,
   TableBody,
@@ -32,6 +33,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUsersFromApi } from "@/services/user.client";
+import { AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import Swal from "sweetalert2";
+import { userdeleteById } from "@/actions/manageUser.action";
 
 // Types based on your Prisma Schema
 export type User = {
@@ -54,6 +58,9 @@ export default function ManageUsersPage() {
   const [totalPagesState, setTotalPagesState] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [roleDialogOpen, setRoleDialogOpen] = React.useState(false);
+  const [selectedUserId, setSelectedUserId] = React.useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = React.useState<"STUDENT" | "TUTOR" | "ADMIN">("STUDENT");
 
   // Fetch users from server when page changes
   React.useEffect(() => {
@@ -89,6 +96,46 @@ export default function ManageUsersPage() {
   const startCount = totalUsers === 0 ? 0 : indexOfFirstItem + 1;
   const endCount = totalUsers === 0 ? 0 : Math.min(indexOfFirstItem + filteredUsers.length, totalUsers);
   const currentItems = filteredUsers;
+
+  const handleDelete = (id: any) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to remove this user!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true, // কনফার্ম বাটনে ক্লিক করলে লোডার দেখাবে
+      preConfirm: async () => {
+        // এই অংশটি 'Yes, delete' ক্লিক করার পর এবং পপআপ বন্ধ হওয়ার আগে রান হবে
+        try {
+          const response = await userdeleteById(id, 10);
+          if (response.error) {
+            throw new Error(response.error.message); // এরর থাকলে ক্যাচ ব্লকে পাঠিয়ে দেবে
+          }
+          return response; // সাকসেস হলে রেসপন্স রিটার্ন করবে
+        } catch (error: any) {
+          Swal.showValidationMessage(`Request failed: ${error.message}`);
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading() // লোডিং অবস্থায় বাইরে ক্লিক করলে যেন বন্ধ না হয়
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // সাকসেস মেসেজ দেখানো
+        Swal.fire(
+          'Deleted!',
+          'The user has been removed.',
+          'success'
+        ).then(() => {
+          // UI স্টেট আপডেট (অটোমেটিক রিলোড ছাড়া ইউজার লিস্ট থেকে সরিয়ে দেওয়া)
+          setUsers(prev => prev.filter(user => user.id !== id));
+          setTotalUsers(prev => prev - 1);
+        });
+      }
+    });
+  };
 
   return (
     <div className="w-full p-6 space-y-6 bg-white dark:bg-slate-950 min-h-screen">
@@ -214,10 +261,21 @@ export default function ManageUsersPage() {
                           Copy ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer">
-                          <ShieldCheck className="mr-2 h-4 w-4 text-blue-500" /> Update Role
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={() => {
+                            setSelectedUserId(user.id);
+                            setSelectedRole(user.role);
+                            setRoleDialogOpen(true);
+                          }}
+                        >
+                          <ShieldCheck className="mr-2 h-4 w-4 text-blue-500" />
+                          Update Role
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer text-rose-600 focus:text-rose-600 focus:bg-rose-50 dark:focus:bg-rose-950">
+                        <DropdownMenuItem
+                          className="cursor-pointer text-rose-600 focus:text-rose-600 focus:bg-rose-50 dark:focus:bg-rose-950"
+                          onClick={() => handleDelete(user.id)}
+                        >
                           <Trash2 className="mr-2 h-4 w-4" /> Delete Account
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -273,6 +331,39 @@ export default function ManageUsersPage() {
           </Button>
         </div>
       </div>
+
+      {/* Update Role Modal */}
+      <AlertModal
+        isOpen={roleDialogOpen}
+        onOpenChange={setRoleDialogOpen}
+        title="Update User Role"
+        description="Select a new role for this user:"
+        actionLabel="Update Role"
+        cancelLabel="Cancel"
+        onAction={async () => {
+          if (selectedUserId) {
+            // TODO: Implement update role API call
+            console.log("Updating role for user:", selectedUserId, "to:", selectedRole);
+            // await updateUserRoleApi(selectedUserId, selectedRole);
+          }
+        }}
+      >
+        <div className="flex items-center gap-3 mt-4">
+          <label htmlFor="roleSelect" className="text-sm font-medium">
+            Role:
+          </label>
+          <select
+            id="roleSelect"
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value as "STUDENT" | "TUTOR" | "ADMIN")}
+            className="px-3 py-2 rounded border bg-white dark:bg-slate-800 text-sm border-slate-300 dark:border-slate-600"
+          >
+            <option value="STUDENT">Student</option>
+            <option value="TUTOR">Tutor</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+      </AlertModal>
     </div>
   );
 }
