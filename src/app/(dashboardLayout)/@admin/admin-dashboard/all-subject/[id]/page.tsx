@@ -1,5 +1,3 @@
-// src/app/(dashboardLayout)/admin/subject/[id]/page.tsx
-
 import { getSingleSubjectsById } from "@/actions/subject.action";
 import SingleSubjectComponent from "@/components/modules/admin/subject/singleSubjectPage/SingleSubjectPage";
 

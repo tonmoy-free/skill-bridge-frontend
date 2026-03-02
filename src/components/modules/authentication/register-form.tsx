@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
+import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -60,6 +61,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
         }
 
         toast.success("User created successfully", { id: toastId });
+        redirect("/");
       } catch (err) {
         toast.error("Internal server error", { id: toastId });
       }

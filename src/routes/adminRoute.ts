@@ -18,10 +18,6 @@ export const adminRoutes: Route[] = [
         url: "/analytics",
       },
       {
-        title: "Create Classs",
-        url: "/admin-dashboard/create-class",
-      },
-      {
         title: "Manage Users",
         url: "/admin-dashboard/manageUser",
       },
@@ -30,25 +26,14 @@ export const adminRoutes: Route[] = [
         url: "/admin-dashboard/booking",
       },
       {
-        title: "All Classes",
-        url: "/admin-dashboard/all-class",
-      },
-      {
-        title: "All Subjects",
-        url: "/admin-dashboard/all-subject",
-      },
-      {
-        title: "Create Subject",
-        url: "/admin-dashboard/create-subject",
+        title: "All Categories",
+        url: "/admin-dashboard/final-all-category",
       },
       {
         title: "Create Category",
-        url: "/admin-dashboard/create-category",
+        url: "/admin-dashboard/final-create-category",
       },
-      {
-        title: "All Categories",
-        url: "/admin-dashboard/all-category",
-      },
+      
     ],
   },
 ];
