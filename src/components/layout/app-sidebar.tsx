@@ -19,6 +19,7 @@ import { adminRoutes } from "@/routes/adminRoute";
 import { userRoutes } from "@/routes/userRoute";
 import { Route } from "@/types";
 import { Roles } from "@/constants/roles";
+import { tutorRoutes } from "@/routes/tutorRoute";
 
 
 
@@ -37,6 +38,9 @@ export function AppSidebar({
       break;
     case Roles.student:
       routes = userRoutes;
+      break;
+    case Roles.tutor:
+      routes = tutorRoutes;
       break;
     default:
       routes = [];

@@ -19,15 +19,17 @@ import { userService } from "@/services/user.service";
 
 export default async function DashboardLayout({
     admin,
-    user
+    student,
+    tutor
 }: Readonly<{
     admin: React.ReactNode;
-    user: React.ReactNode;
+    student: React.ReactNode;
+    tutor: React.ReactNode;
 }>) {
 
     const { data } = await userService.getSession();
 
-    console.log("Dashboard layout",data)
+    console.log("Dashboard layout", data)
 
     const userInfo = data.user;
 
@@ -54,7 +56,13 @@ export default async function DashboardLayout({
                     </Breadcrumb>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">
-                    {userInfo.role === Roles.admin ? admin : user}
+                    {
+                        userInfo.role === Roles.admin
+                            ? admin
+                            : userInfo.role === Roles.student
+                                ? student
+                                : tutor
+                    }
                 </div>
             </SidebarInset>
         </SidebarProvider>

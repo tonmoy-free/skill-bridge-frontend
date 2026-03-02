@@ -72,9 +72,9 @@ export default function FinalCreateCategoryComponent() {
         <div>
             <Card className="md:w-4/12 w-full mx-auto">
                 <CardHeader>
-                    <CardTitle>Create an Subject</CardTitle>
+                    <CardTitle>Create Category</CardTitle>
                     <CardDescription>
-                        Enter your information below to create your Subject
+                        Enter your information below to create your Category
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

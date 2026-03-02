@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 
@@ -19,10 +19,6 @@ const availabilitySchema = z
 
 type AvailabilityFormValues = z.infer<typeof availabilitySchema>;
 
-type AvailabilitySlot = AvailabilityFormValues & {
-  id: string;
-};
-
 /* ---------------- DAYS ---------------- */
 
 const days = [
@@ -37,28 +33,9 @@ const days = [
 
 /* ---------------- PAGE ---------------- */
 
-export default function AvailabilityPage() {
-  const [slots, setSlots] = useState<AvailabilitySlot[]>([]);
+export default function AvailabilityForm() {
+  const [slots, setSlots] = useState<AvailabilityFormValues[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  /* ---------------- LOAD DATA ---------------- */
-
-  useEffect(() => {
-    const fetchAvailability = async () => {
-      try {
-        const res = await fetch("/api/availability");
-        const data = await res.json();
-        setSlots(data);
-      } catch (error) {
-        console.error("Failed to load availability");
-      }
-    };
-
-    fetchAvailability();
-  }, []);
-
-  /* ---------------- FORM ---------------- */
 
   const form = useForm({
     defaultValues: {
@@ -70,6 +47,7 @@ export default function AvailabilityPage() {
     onSubmit: async ({ value }) => {
       setErrorMessage(null);
 
+      // 🔥 ZOD VALIDATION MANUALLY
       const result = availabilitySchema.safeParse(value);
 
       if (!result.success) {
@@ -77,56 +55,31 @@ export default function AvailabilityPage() {
         return;
       }
 
-      try {
-        setLoading(true);
+      // 🔥 Overlap Check
+      const overlap = slots.some(
+        (slot) =>
+          slot.dayOfWeek === value.dayOfWeek &&
+          value.startTime < slot.endTime &&
+          value.endTime > slot.startTime
+      );
 
-        const res = await fetch("/api/availability", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(value),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || "Failed to add slot");
-        }
-
-        setSlots((prev) => [...prev, data]);
-        form.reset();
-      } catch (error: any) {
-        setErrorMessage(error.message);
-      } finally {
-        setLoading(false);
+      if (overlap) {
+        setErrorMessage("Time slot overlaps with existing availability!");
+        return;
       }
+
+      setSlots((prev) => [...prev, value]);
+      form.reset();
     },
   });
 
-  /* ---------------- DELETE ---------------- */
-
-  const handleDelete = async (id: string) => {
-    try {
-      await fetch(`/api/availability/${id}`, {
-        method: "DELETE",
-      });
-
-      setSlots((prev) => prev.filter((slot) => slot.id !== id));
-    } catch (error) {
-      alert("Delete failed");
-    }
-  };
-
-  /* ---------------- UI ---------------- */
-
   return (
-    <div className="min-h-screen bg-base-200 p-6 flex justify-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center p-6">
       <div className="card w-full max-w-xl bg-base-100 shadow-xl p-6 space-y-6">
-
         <h2 className="text-2xl font-bold text-center">
           Manage Availability
         </h2>
 
-        {/* FORM */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -194,23 +147,18 @@ export default function AvailabilityPage() {
             )}
           </form.Field>
 
-          {/* Error */}
+          {/* Error Message */}
           {errorMessage && (
             <div className="alert alert-error">
               <span>{errorMessage}</span>
             </div>
           )}
 
-          <button
-            type="submit"
-            className={`btn btn-primary w-full ${loading && "loading"}`}
-            disabled={loading}
-          >
+          <button type="submit" className="btn btn-primary w-full">
             Add Slot
           </button>
         </form>
 
-        {/* LIST */}
         <div className="divider">Your Weekly Availability</div>
 
         {slots.length === 0 ? (
@@ -219,9 +167,9 @@ export default function AvailabilityPage() {
           </p>
         ) : (
           <div className="space-y-2">
-            {slots.map((slot) => (
+            {slots.map((slot, index) => (
               <div
-                key={slot.id}
+                key={index}
                 className="flex justify-between items-center bg-base-200 p-3 rounded-lg"
               >
                 <span>
@@ -235,7 +183,11 @@ export default function AvailabilityPage() {
 
                 <button
                   className="btn btn-sm btn-error"
-                  onClick={() => handleDelete(slot.id)}
+                  onClick={() =>
+                    setSlots((prev) =>
+                      prev.filter((_, i) => i !== index)
+                    )
+                  }
                 >
                   Delete
                 </button>

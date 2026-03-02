@@ -1,7 +1,9 @@
 "use client";
 
+import { getAllTutor } from "@/actions/assignTutor.action";
 import { createCategory } from "@/actions/category.action";
 import { getAllClass } from "@/actions/class.action";
+import { finalGetAllCategory } from "@/actions/finalCategory.action";
 import { createSubject, getAllSubject } from "@/actions/subject.action";
 import { Button } from "@/components/ui/button"
 import {
@@ -29,26 +31,26 @@ import z from "zod";
 
 // ১. ভ্যালিডেশন স্কিমা আপডেট
 const formSchema = z.object({
-    classId: z.string().min(1, "Please select a class"),
-    subjectId: z.string().min(1, "Subject name is required"),
+    tutorId: z.string().min(1, "Please select a tutor"),
+    categoryId: z.string().min(1, "Please select a category"),
 });
 
-export default function CreateCategoryComponent() {
+export default function AssignTutorCategoryComponent() {
     const [loading, setLoading] = useState(false);
-    const [classesData, setClassesData] = useState<any[]>([]);
-    const [subjectData, setSubjectData] = useState<any[]>([]);
+    const [tutorData, setTutorData] = useState<any[]>([]);
+    const [categoryData, setCategoryData] = useState<any[]>([]);
 
     useEffect(() => {
         const loadInitialData = async () => {
             try {
                 setLoading(true);
-                const [classRes, subjectRes] = await Promise.all([
-                    getAllClass(),
-                    getAllSubject()
+                const [tutorRes, categoryRes] = await Promise.all([
+                    getAllTutor(),
+                    finalGetAllCategory()
                 ]);
                 
-                if (classRes.data) setClassesData(classRes.data);
-                if (subjectRes.data) setSubjectData(subjectRes.data);
+                if (tutorRes.data) setTutorData(tutorRes.data);
+                if (categoryRes.data) setCategoryData(categoryRes.data);
             } catch (err) {
                 console.error("Fetch error:", err);
             } finally {
@@ -60,8 +62,8 @@ export default function CreateCategoryComponent() {
 
     const form = useForm({
         defaultValues: {
-            classId: "",
-            subjectId: "",
+            tutorId: "",
+            categoryId: "",
         },
         validators: {
             onSubmit: formSchema,
@@ -69,13 +71,13 @@ export default function CreateCategoryComponent() {
         onSubmit: async ({ value }) => {
             const toastId = toast.loading("Creating Category...");
             try {
-                const res = await createCategory({ 
-                    classId: value.classId,
-                    subjectId: value.subjectId,
-                }, 5);
-                console.log("Create Category Response:", res);
+                // const res = await createCategory({ 
+                //     tutorId: value.tutorId,
+                //     categoryId: value.categoryId,
+                // }, 5);
+                // console.log("Create Category Response:", res);
 
-                if (res.error) throw new Error(res.error.message);
+                // if (res.error) throw new Error(res.error.message);
 
                 toast.success("Category created successfully", { id: toastId });
                 form.reset();
@@ -89,8 +91,8 @@ export default function CreateCategoryComponent() {
         <div>
             <Card className="md:w-5/12 w-full mx-auto">
                 <CardHeader>
-                    <CardTitle>Create Category</CardTitle>
-                    <CardDescription>Give a category name</CardDescription>
+                    <CardTitle>Assign Tutor Category</CardTitle>
+                    <CardDescription>Select tutor and category relations</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form
@@ -101,17 +103,17 @@ export default function CreateCategoryComponent() {
                         }}
                         className="space-y-4"
                     >
-                        {/* ১. Class Dropdown */}
-                        <form.Field name="classId" children={(field) => (
+                        {/* ১. Tutor Dropdown */}
+                        <form.Field name="tutorId" children={(field) => (
                             <Field>
-                                <FieldLabel>Select Class</FieldLabel>
+                                <FieldLabel>Select Tutor</FieldLabel>
                                 <Select onValueChange={field.handleChange} value={field.state.value}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder={loading ? "Loading classes..." : "Select a class"} />
+                                        <SelectValue placeholder={loading ? "Loading tutors..." : "Select a tutor"} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {classesData.map((cls) => (
-                                            <SelectItem key={cls.id} value={cls.id}>{cls.name}</SelectItem>
+                                        {tutorData.map((tutor) => (
+                                            <SelectItem key={tutor.id} value={tutor.id}>{tutor.user.name}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
@@ -120,15 +122,15 @@ export default function CreateCategoryComponent() {
                         )} />
 
                         {/* ২. Subject Dropdown (Parent Subject) */}
-                        <form.Field name="subjectId" children={(field) => (
+                        <form.Field name="categoryId" children={(field) => (
                             <Field>
-                                <FieldLabel>Parent Subject (Optional)</FieldLabel>
+                                <FieldLabel>Category</FieldLabel>
                                 <Select onValueChange={field.handleChange} value={field.state.value}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select parent subject (if any)" />
+                                        <SelectValue placeholder="Select tutor category" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {subjectData.map((sub) => (
+                                        {categoryData.map((sub) => (
                                             <SelectItem key={sub.id} value={sub.id}>{sub.name}</SelectItem>
                                         ))}
                                     </SelectContent>
@@ -147,3 +149,4 @@ export default function CreateCategoryComponent() {
         </div>
     );
 }
+

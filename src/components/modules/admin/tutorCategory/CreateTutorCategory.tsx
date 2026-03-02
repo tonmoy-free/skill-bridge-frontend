@@ -33,7 +33,7 @@ const formSchema = z.object({
     subjectId: z.string().min(1, "Subject name is required"),
 });
 
-export default function CreateCategoryComponent() {
+export default function CreateTutorCategoryComponent() {
     const [loading, setLoading] = useState(false);
     const [classesData, setClassesData] = useState<any[]>([]);
     const [subjectData, setSubjectData] = useState<any[]>([]);
@@ -89,8 +89,8 @@ export default function CreateCategoryComponent() {
         <div>
             <Card className="md:w-5/12 w-full mx-auto">
                 <CardHeader>
-                    <CardTitle>Create Category</CardTitle>
-                    <CardDescription>Give a category name</CardDescription>
+                    <CardTitle>Create Subject Configuration</CardTitle>
+                    <CardDescription>Select class and subject relations</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form
@@ -147,3 +147,4 @@ export default function CreateCategoryComponent() {
         </div>
     );
 }
+

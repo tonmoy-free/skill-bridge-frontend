@@ -61,7 +61,6 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
         }
 
         toast.success("User created successfully", { id: toastId });
-        redirect("/");
       } catch (err) {
         toast.error("Internal server error", { id: toastId });
       }

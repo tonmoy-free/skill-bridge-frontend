@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -30,7 +30,7 @@ const formSchema = z.object({
 
 
 export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
-
+  const router = useRouter()
   const handleGoogleLogin = async () => {
     const data = authClient.signIn.social({
       provider: "google",
@@ -59,7 +59,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
         }
 
         toast.success("User Logged in successfully", { id: toastId });
-        redirect("/");
+        router.push("/")
       } catch (err) {
         toast.error("Internal server error", { id: toastId });
       }
