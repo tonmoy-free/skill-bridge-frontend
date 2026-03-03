@@ -1,9 +1,8 @@
+import CreateTutorProfileComponent from "@/components/modules/tutor/CreateTutorProfile";
 
 export default async function TutorProfile() {
 
     return (
-        <div>
-            Tutor profile
-        </div>
+        <CreateTutorProfileComponent />
     );
 }

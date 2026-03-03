@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
+import { createAvailability } from "@/actions/tutor.action";
+import { toast } from "sonner";
 
 /* ---------------- ZOD SCHEMA ---------------- */
 
@@ -33,7 +35,7 @@ const days = [
 
 /* ---------------- PAGE ---------------- */
 
-export default function AvailabilityForm() {
+export default function AvailabilityPage() {
   const [slots, setSlots] = useState<AvailabilityFormValues[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -53,6 +55,23 @@ export default function AvailabilityForm() {
       if (!result.success) {
         setErrorMessage(result.error.issues[0].message);
         return;
+      }
+       const toastId = toast.loading("Creating Availability");
+      //POST api Availiability
+      try {
+        const res = await createAvailability(value, 0);
+
+        if (!res.data || res.error) {
+          toast.error("Internal server error", { id: toastId });
+          return;
+        }
+
+        // console.log({ name: value.subject });
+        toast.success("Availability created successfully", { id: toastId });
+        form.reset();
+
+      } catch (error: any) {
+        setErrorMessage(error.message);
       }
 
       // 🔥 Overlap Check
@@ -74,7 +93,7 @@ export default function AvailabilityForm() {
   });
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-6">
+    <div className=" flex items-center justify-center p-6">
       <div className="card w-full max-w-xl bg-base-100 shadow-xl p-6 space-y-6">
         <h2 className="text-2xl font-bold text-center">
           Manage Availability

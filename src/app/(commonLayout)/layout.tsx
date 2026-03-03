@@ -9,7 +9,7 @@ export default async function CommonLayout({ children }: { children: React.React
 
   const session = data?.user || null;
 
-  // console.log("from navbar",data)
+  // console.log("from navbar",session.id)
 
   return (
     <div>
