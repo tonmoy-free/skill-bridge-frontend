@@ -62,7 +62,7 @@ const Navbar = ({
   session,
 }: NavbarProps) => {
   return (
-    <header 
+    <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 border-b bg-white/80 backdrop-blur-md dark:bg-slate-950/80 w-full overflow-x-hidden",
         className
@@ -73,15 +73,15 @@ const Navbar = ({
       */}
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex h-16 items-center justify-between">
-          
+
           {/* --- LEFT SIDE: Logo & Desktop Nav --- */}
           <div className="flex items-center gap-4 lg:gap-8">
             <Link href="/" className="flex items-center shrink-0 transition-opacity hover:opacity-90">
-              <Image 
-                src={skillbridgeLight} 
-                alt="skillbridge" 
+              <Image
+                src={skillbridgeLight}
+                alt="skillbridge"
                 priority
-                className="w-28 md:w-36 h-auto dark:brightness-0 dark:invert" 
+                className="w-28 md:w-36 h-auto dark:brightness-0 dark:invert"
               />
             </Link>
 
@@ -107,12 +107,15 @@ const Navbar = ({
 
           {/* --- RIGHT SIDE: Actions --- */}
           <div className="flex items-center gap-2">
-            
+
             {/* Desktop Auth */}
             <div className="hidden lg:flex items-center gap-3">
               <ModeToggle />
               {session?.email ? (
-                <LogoutPage />
+                <>
+                  <LogoutPage />
+                  <div>{session?.email}</div>
+                </>
               ) : (
                 <div className="flex items-center gap-2">
                   <Button asChild variant="ghost" size="sm">
@@ -135,20 +138,20 @@ const Navbar = ({
                     <span className="sr-only">Toggle menu</span>
                   </Button>
                 </SheetTrigger>
-                
+
                 {/* Mobile Sheet constrained to right side without overflow */}
                 <SheetContent side="right" className="w-[85%] sm:w-[350px] flex flex-col justify-between p-6">
                   <div className="flex flex-col">
                     <SheetHeader className="text-left border-b pb-4">
                       <SheetTitle>
-                        <Image 
-                          src={skillbridgeLight} 
-                          alt="Logo" 
-                          className="w-24 h-auto dark:brightness-0 dark:invert" 
+                        <Image
+                          src={skillbridgeLight}
+                          alt="Logo"
+                          className="w-24 h-auto dark:brightness-0 dark:invert"
                         />
                       </SheetTitle>
                     </SheetHeader>
-                    
+
                     <nav className="flex flex-col gap-2 mt-6">
                       {menu.map((item) => (
                         <Link

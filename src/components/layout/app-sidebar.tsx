@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link";
 import { adminRoutes } from "@/routes/adminRoute";
-import { userRoutes } from "@/routes/userRoute";
+import { studentRoutes } from "@/routes/studentRoute";
 import { Route } from "@/types";
 import { Roles } from "@/constants/roles";
 import { tutorRoutes } from "@/routes/tutorRoute";
@@ -37,7 +37,7 @@ export function AppSidebar({
       routes = adminRoutes;
       break;
     case Roles.student:
-      routes = userRoutes;
+      routes = studentRoutes;
       break;
     case Roles.tutor:
       routes = tutorRoutes;

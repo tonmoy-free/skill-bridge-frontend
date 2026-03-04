@@ -11,6 +11,10 @@ export const createTutorProfile = async (updateData: Partial<CreateTutorProfileD
     return await tutorService.createTutorProfile(updateData, { revalidate });
 };
 
+export const updateTutorProfileById = async ( updateData: Partial<CreateTutorProfileData>, revalidate?: number) => {
+    return await tutorService.updateTutorProfileById(updateData, { revalidate });
+};
+
 export const getTutorProfileById = async ( revalidate?: number) => {
     return await tutorService.getTutorProfileById({ revalidate });
 };
@@ -21,3 +25,5 @@ export const getAvailabilityById = async (id: any, revalidate?: number) => {
 export const getDeleteAvailabilitytById = async (params?: any, revalidate?: number) => {
     return await tutorService.getDeleteAvailabilitytById(params, { revalidate });
 };
+
+

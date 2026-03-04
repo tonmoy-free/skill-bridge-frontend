@@ -1,7 +1,7 @@
 "use client";
 
 import { createSubject } from "@/actions/subject.action";
-import { createTutorProfile } from "@/actions/tutor.action";
+import { createTutorProfile, updateTutorProfileById } from "@/actions/tutor.action";
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
-import Link from "next/link";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import z from "zod";
@@ -46,7 +45,7 @@ export interface TutorProfileData {
 
 }
 
-export default function CreateTutorProfileComponent({ initialData }: { initialData: TutorProfileData }) {
+export default function TutorProfileComponent({ initialData }: { initialData: TutorProfileData }) {
     console.log("Initial data received in component:", initialData);
     const form = useForm({
         defaultValues: {
@@ -72,7 +71,7 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
             const toastId = toast.loading("Creating Profile");
             try {
                 // Example call assuming you have the userId from elsewhere (e.g., props or auth hook)
-                const res = await createTutorProfile(value, 0);
+                const res = await updateTutorProfileById(value, 0);
 
                 if (!res.data || res.error) {
                     toast.error("Internal server error", { id: toastId });
@@ -90,20 +89,11 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
     return (
         <div>
             <Card className="md:w-6/12 w-full mx-auto">
-                <CardHeader className="flex justify-between items-center">
-                    <div>
-                        <CardTitle>Tutor Profile</CardTitle>
+                <CardHeader>
+                        <CardTitle>Update Tutor Profile</CardTitle>
                         <CardDescription>
-                            Your profile Details
+                            You can update your profile
                         </CardDescription>
-                    </div>
-                    <div>
-                        <Link href={`/tutor-dashboard/tutor-profile/${initialData?.id}`}>
-                            <Button form="create-subject-form" type="submit" className="">
-                                Edit Profile
-                            </Button>
-                        </Link>
-                    </div>
                 </CardHeader>
                 <CardContent>
                     <form
@@ -122,7 +112,6 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         id={field.name}
                                         value={field.state.value}
                                         onChange={(e) => field.handleChange(e.target.value)}
-                                        readOnly
                                     />
                                     {field.state.meta.isTouched && (
                                         <FieldError errors={field.state.meta.errors} />
@@ -139,7 +128,6 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         placeholder="0"
                                         id={field.name}
                                         value={field.state.value}
-                                        readOnly
                                         // Conversion: String to Number
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                     />
@@ -158,7 +146,6 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         placeholder="0"
                                         id={field.name}
                                         value={field.state.value}
-                                        readOnly
                                         // Conversion: String to Number
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                     />
@@ -177,7 +164,6 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         placeholder="0"
                                         id={field.name}
                                         value={field.state.value}
-                                        readOnly
                                         // Conversion: String to Number
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                     />
@@ -189,17 +175,11 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                         </FieldGroup>
                     </form>
                 </CardContent>
-                {/* <CardFooter className="flex justify-end flex-col gap-5">
-                    {initialData ? (
-                        <Button disabled form="create-subject-form" type="submit" className="w-full cursor-pointer">
-                            Create Profile
-                        </Button>
-                    ) : (
-                        <Button form="create-subject-form" type="submit" className="w-full">
-                            Create Profile
-                        </Button>
-                    )}
-                </CardFooter> */}
+                <CardFooter className="flex justify-end flex-col gap-5">  
+                    <Button form="create-subject-form" type="submit" className="w-full">
+                        Update Profile
+                    </Button>
+                </CardFooter>
             </Card>
         </div>
     );
