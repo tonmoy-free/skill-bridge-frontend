@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
-import { createAvailability } from "@/actions/tutor.action";
+import { createAvailability, getDeleteAvailabilitytById, getTutorProfileById } from "@/actions/tutor.action";
 import { toast } from "sonner";
 
 /* ---------------- ZOD SCHEMA ---------------- */
@@ -33,12 +33,20 @@ const days = [
   { label: "Saturday", value: 6 },
 ];
 
-/* ---------------- PAGE ---------------- */
+/* ---------------- PAGE -------------{ avilabilityById }: { avilabilityById: any }--- */
 
-export default function AvailabilityPage() {
-  const [slots, setSlots] = useState<AvailabilityFormValues[]>([]);
+export default function AvailabilityPage({ avilabilityById }: { avilabilityById: any }) {
+  // const [slots, setSlots] = useState<AvailabilityFormValues[]>([]);
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // setSlots(avilabilityById);
+
+  // Initialize state with the prop data, ensuring it's an array
+  // If avilabilityById is a single object, wrap it in []. If it's null, use []
+  // Use a fallback to an empty array [] to ensure .map() always works
+  const [slots, setSlots] = useState<any[]>(Array.isArray(avilabilityById.data) ? avilabilityById.data : []);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  console.log("ssssssssss", slots)
   const form = useForm({
     defaultValues: {
       dayOfWeek: 0,
@@ -56,10 +64,27 @@ export default function AvailabilityPage() {
         setErrorMessage(result.error.issues[0].message);
         return;
       }
-       const toastId = toast.loading("Creating Availability");
+      const toastId = toast.loading("Creating Availability");
       //POST api Availiability
       try {
-        const res = await createAvailability(value, 0);
+        // 🔥 Overlap Check
+        const overlap = slots.some(
+          (slot) =>
+            slot.dayOfWeek === value.dayOfWeek &&
+            value.startTime < slot.endTime &&
+            value.endTime > slot.startTime
+        );
+
+        if (overlap) {
+          setErrorMessage("Time slot overlaps with existing availability!");
+          return;
+        }
+
+
+        const tutorProfile = await getTutorProfileById(1);
+        const { id: tutorProfileId } = tutorProfile.data;
+        console.log("tutor profile akane", tutorProfile.data.id)
+        const res = await createAvailability(tutorProfileId, value, 0);
 
         if (!res.data || res.error) {
           toast.error("Internal server error", { id: toastId });
@@ -74,23 +99,33 @@ export default function AvailabilityPage() {
         setErrorMessage(error.message);
       }
 
-      // 🔥 Overlap Check
-      const overlap = slots.some(
-        (slot) =>
-          slot.dayOfWeek === value.dayOfWeek &&
-          value.startTime < slot.endTime &&
-          value.endTime > slot.startTime
-      );
 
-      if (overlap) {
-        setErrorMessage("Time slot overlaps with existing availability!");
-        return;
-      }
 
       setSlots((prev) => [...prev, value]);
       form.reset();
     },
   });
+
+  /* ---------------- DELETE HANDLER ---------------- */
+  const handleDelete = async (id: string) => {
+    const toastId = toast.loading("Deleting slot...");
+    try {
+      const res = await getDeleteAvailabilitytById(id, 1);
+
+      console.log("deleted id", id)
+      if (res.error) {
+        // Access the message property specifically
+        toast.error(res.error.message || "Failed to delete", { id: toastId });
+        return;
+      }
+
+      // Update UI only if DB deletion was successful
+      setSlots((prev) => prev.filter((slot) => slot.id !== id));
+      toast.success("Slot removed", { id: toastId });
+    } catch (error) {
+      toast.error("An unexpected error occurred", { id: toastId });
+    }
+  };
 
   return (
     <div className=" flex items-center justify-center p-6">
@@ -202,11 +237,12 @@ export default function AvailabilityPage() {
 
                 <button
                   className="btn btn-sm btn-error"
-                  onClick={() =>
-                    setSlots((prev) =>
-                      prev.filter((_, i) => i !== index)
-                    )
-                  }
+                  // onClick={() =>
+                  //   setSlots((prev) =>
+                  //     prev.filter((_, i) => i !== index)
+                  //   )
+                  // }
+                  onClick={() => handleDelete(slot.id)}
                 >
                   Delete
                 </button>

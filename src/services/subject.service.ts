@@ -211,7 +211,7 @@ export const subjectService = {
             }
         },
 
-        getSingleSubjectById: async function (id: string, options?: ServiceOptions) {
+    getSingleSubjectById: async function (id: string, options?: ServiceOptions) {
         try {
             const url = new URL(`${API_URL}/subject/${id}`);
 

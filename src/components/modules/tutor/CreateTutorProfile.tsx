@@ -33,13 +33,26 @@ const formSchema = z.object({
 // Extract type from schema for the form
 type TutorFormValues = z.infer<typeof formSchema>;
 
-export default function CreateTutorProfileComponent() {
+export interface TutorProfileData {
+    bio: string;
+    hourlyFee: number;
+    monthlyFee: number;
+    experience: number;
+    id: string;
+    rating: number;
+    createdAt: string;
+    updatedAt: string;
+
+}
+
+export default function CreateTutorProfileComponent({ initialData }: { initialData: TutorProfileData }) {
+    console.log("Initial data received in component:", initialData);
     const form = useForm({
         defaultValues: {
-            bio: "",
-            hourlyFee: 0, // Changed to number
-            monthlyFee: 0, // Changed to number
-            experience: 0, // Changed to number
+            bio: initialData?.bio || "",
+            hourlyFee: initialData?.hourlyFee || 0, // Changed to number
+            monthlyFee: initialData?.monthlyFee || 0, // Changed to number
+            experience: initialData?.experience || 0, // Changed to number
         } as TutorFormValues,
         validators: {
             onSubmit: formSchema,
@@ -77,9 +90,9 @@ export default function CreateTutorProfileComponent() {
         <div>
             <Card className="md:w-6/12 w-full mx-auto">
                 <CardHeader>
-                    <CardTitle>Create Tutor Profile</CardTitle>
+                    <CardTitle>{!initialData ? "Create Tutor Profile" : "Tutor Profile"}</CardTitle>
                     <CardDescription>
-                        Enter your information below to create your Profile
+                        {!initialData ? "Create Tutor Profile" : "You can update your profile"}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -163,9 +176,18 @@ export default function CreateTutorProfileComponent() {
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-end flex-col gap-5">
-                    <Button form="create-subject-form" type="submit" className="w-full">
+                    {initialData ? (
+                        <Button disabled form="create-subject-form" type="submit" className="w-full cursor-pointer">
+                            Create Profile
+                        </Button>
+                    ) : (
+                        <Button form="create-subject-form" type="submit" className="w-full">
+                            Create Profile
+                        </Button>
+                    )}
+                    {/* <Button form="create-subject-form" type="submit" className="w-full">
                         Create Profile
-                    </Button>
+                    </Button> */}
                 </CardFooter>
             </Card>
         </div>
