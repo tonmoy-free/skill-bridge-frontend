@@ -1,88 +1,61 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { blogService } from "@/services/blog.service";
-import { TutorProfile } from "@/types";
-import { notFound } from "next/navigation";
+import TutorProfileView from "@/components/commonLayout/TutorProfileView";
 
-export async function generateStaticParams() {
-    const { data } = await blogService.getBlogPosts();
+export default function TutorProfileSinglePage() {
+    const exampleTutorProfile = {
+        id: "prof_7890123456",
+        userId: "mjG25tnAY8KR6bi4KfFtUq54MYtkU6kI",
+        bio: "Hi there! I'm Tonmoy, a Senior Software Engineer with over 8 years of experience in Full-Stack Development. \n\nI specialize in helping students master React, Node.js, and Database design. My teaching philosophy is project-based; we won't just look at code, we'll build real-world applications together. \n\nWhether you are a beginner looking to start your journey or an advanced developer mastering system architecture, I'm here to guide you!",
+        hourlyFee: 45.00,
+        monthlyFee: 650.00,
+        experience: 8,
+        rating: 4.9,
+        createdAt: "2026-03-02T09:40:36.739Z",
+        updatedAt: "2026-03-04T12:20:00.000Z",
 
+        // Relation: User
+        user: {
+            id: "mjG25tnAY8KR6bi4KfFtUq54MYtkU6kI",
+            name: "Tonmoy Khan",
+            email: "tonmoykhan.free@gmail.com",
+            emailVerified: true,
+            image: "https://github.com/shadcn.png", // Using a placeholder for UI testing
+            role: "TUTOR", // Note: Role changed to TUTOR for this context
+            phone: "+880 1712-345678",
+            status: "ACTIVE",
+        },
 
-    return data?.map((blog: TutorProfile) => ({ id: blog.id })).splice(0, 3);
-}
+        // Relation: Category[]
+        categories: [
+            { id: "cat_1", name: "Web Development" },
+            { id: "cat_2", name: "Computer Science" },
+            { id: "cat_3", name: "System Design" },
+        ],
 
-export default async function TutorProfileSinglePage({ params }: { params: Promise<{ id: string }>; }) {
+        // Relation: Availability[]
+        availability: [
+            { id: "av_1", day: "Monday", startTime: "09:00", endTime: "17:00" },
+            { id: "av_2", day: "Wednesday", startTime: "10:00", endTime: "14:00" },
+        ],
 
-    const { id } = await params;
-
-    // const {data } = await blogService.getTutorById(id);
-
-    const response = await blogService.getTutorById(id);
-    const data: TutorProfile | null = response.data;
-
-    if (!data) {
-        return notFound();
-    }
-
+        // Relation: Review[]
+        reviews: [
+            {
+                id: "rev_1",
+                rating: 5,
+                comment: "Excellent tutor! Helped me understand Prisma and PostgreSQL in just two sessions.",
+                createdAt: "2026-03-04T15:00:00.000Z",
+                user: { name: "Alice Johnson" } // Assuming Review model includes reviewer name
+            },
+            {
+                id: "rev_2",
+                rating: 4.8,
+                comment: "Very patient and clear explanations.",
+                createdAt: "2026-03-01T10:00:00.000Z",
+                user: { name: "Bob Smith" }
+            }
+        ]
+    };
     return (
-        <div className="container mx-auto py-10 px-4">
-            <Card className="max-w-3xl mx-auto shadow-xl rounded-2xl">
-                <CardContent className="p-8 space-y-6">
-
-                    {/* Name Section */}
-                    <div>
-                        <h1 className="text-3xl font-bold">
-                            {data.user?.name || "Unknown Tutor"}
-                        </h1>
-                        <p className="text-muted-foreground">
-                            {data.user?.email}
-                        </p>
-                    </div>
-
-                    <Separator />
-
-                    {/* Bio */}
-                    <div>
-                        <h2 className="text-xl font-semibold mb-2">About</h2>
-                        <p className="text-gray-700 leading-relaxed">
-                            {data.bio}
-                        </p>
-                    </div>
-
-                    <Separator />
-
-                    {/* Info Grid */}
-                    <div className="grid grid-cols-2 gap-4">
-
-                        <div className="space-y-1">
-                            <p className="text-sm text-muted-foreground">Hourly Fee</p>
-                            <Badge variant="secondary" className="text-lg">
-                                ৳ {data.hourlyFee}
-                            </Badge>
-                        </div>
-
-                        <div className="space-y-1">
-                            <p className="text-sm text-muted-foreground">Monthly Fee</p>
-                            <Badge variant="secondary" className="text-lg">
-                                ৳ {data.monthlyFee ?? "N/A"}
-                            </Badge>
-                        </div>
-
-                        <div className="space-y-1">
-                            <p className="text-sm text-muted-foreground">Experience</p>
-                            <Badge>{data.experience ?? 0} Years</Badge>
-                        </div>
-
-                        <div className="space-y-1">
-                            <p className="text-sm text-muted-foreground">Rating</p>
-                            <Badge>{data.rating ?? 0} ⭐</Badge>
-                        </div>
-
-                    </div>
-
-                </CardContent>
-            </Card>
-        </div>
-    );
+        <TutorProfileView profile={exampleTutorProfile} />
+    )
 }
