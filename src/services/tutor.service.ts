@@ -28,11 +28,21 @@ export interface CreateAvailabilityData {
     isActive?: boolean; // default true হবে
 }
 
+export interface Category {
+    id: string;
+    name: string;
+}
+
 export interface CreateTutorProfileData {
     bio: string;
     hourlyFee: number;
     monthlyFee: number;
     experience: number;
+    // Option A: Specific Interface (Recommended)
+    categories?: Category[]; 
+    
+    // Option B: Array of Strings (if you are just sending IDs)
+    // categoryIds?: string[];
 }
 
 export const tutorService = {

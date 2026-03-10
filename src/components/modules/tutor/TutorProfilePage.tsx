@@ -13,7 +13,7 @@ const getDayName = (day: number) => {
 };
 
 export default function TutorProfilePage({ data }: { data: any }) {
-    const { id,user, availability, bio, hourlyFee, monthlyFee, experience, rating } = data;
+    const { id, user, categories, availability, bio, hourlyFee, monthlyFee, experience, rating } = data;
     console.log("ddddd", data)
 
     return (
@@ -32,10 +32,13 @@ export default function TutorProfilePage({ data }: { data: any }) {
                     </div>
 
                     <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                        <Badge variant="secondary" className="gap-1">
-                            <Star size={14} className="fill-current text-yellow-500" />
-                            {rating > 0 ? rating : "New Tutor"}
-                        </Badge>
+                        <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                            {categories?.map((cat: any) => (
+                                <Badge key={cat.id} variant="outline" className="bg-slate-50">
+                                    {cat.name}
+                                </Badge>
+                            ))}
+                        </div>
                         <Badge variant="outline" className="gap-1">
                             <Briefcase size={14} />
                             {experience} Years Exp.
