@@ -14,16 +14,20 @@ import {
     MessageCircle,
     CalendarDays
 } from "lucide-react";
+import defaultTutor from "../../../public/Image/defaultTutor.png";
 
 export default function TutorProfileView({ profile }: { profile: any }) {
-    const { user, categories, availability, reviews, experience, rating, hourlyFee, bio } = profile;
+    const { user, categories, availability, reviews, experience, rating, hourlyFee, monthlyFee, bio } = profile.data;
+    console.log("this is from profile", profile)
+    const imageSrc = user.image ? user.image : defaultTutor.src;
 
     return (
         <div className="container mx-auto py-10 px-4 max-w-6xl mt-12">
             {/* Header Section */}
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 p-6 bg-card border rounded-xl">
                 <Avatar className="h-32 w-32 border-4 border-background shadow-xl">
-                    <AvatarImage src={user.image} />
+                    {/* <AvatarImage src={user.image} /> */}
+                    {user.image ? (<AvatarImage src={user.image} />) : (<AvatarImage src={imageSrc} alt="Default Avatar" />)}
                     <AvatarFallback className="text-2xl">{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
 
@@ -171,10 +175,10 @@ export default function TutorProfileView({ profile }: { profile: any }) {
                                 <span className="text-muted-foreground">Hourly Rate</span>
                                 <span className="text-2xl font-bold text-primary">${hourlyFee}</span>
                             </div>
-                            {profile.monthlyFee && (
+                            {monthlyFee && (
                                 <div className="flex justify-between items-center pb-2 border-b">
                                     <span className="text-muted-foreground">Monthly Plan</span>
-                                    <span className="text-xl font-semibold">${profile.monthlyFee}</span>
+                                    <span className="text-xl font-semibold">${monthlyFee}</span>
                                 </div>
                             )}
                             <div className="bg-muted/30 p-3 rounded-lg text-xs text-muted-foreground">

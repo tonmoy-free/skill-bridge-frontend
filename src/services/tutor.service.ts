@@ -39,8 +39,8 @@ export interface CreateTutorProfileData {
     monthlyFee: number;
     experience: number;
     // Option A: Specific Interface (Recommended)
-    categories?: Category[]; 
-    
+    categories?: Category[];
+
     // Option B: Array of Strings (if you are just sending IDs)
     // categoryIds?: string[];
 }
@@ -178,7 +178,7 @@ export const tutorService = {
         }
     },
 
-    updateTutorProfileById: async function ( updateData: Partial<CreateTutorProfileData>, options?: ServiceOptions) {
+    updateTutorProfileById: async function (updateData: Partial<CreateTutorProfileData>, options?: ServiceOptions) {
         const { data } = await userService.getSession();
 
         const session = data?.user || null;
@@ -274,6 +274,48 @@ export const tutorService = {
         }
     },
 
+    getAllTutorProfile: async function (options?: ServiceOptions ,par?:GetTutorProfileParams) {
+        const { data } = await userService.getSession();
+
+        // const session = data?.user || null;
+        // const id = session.id;
+        //   console.log("from navbar",session.id)
+        try {
+            const url = new URL(`${API_URL}/tutors/tutors-profile`);
+
+            const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+            const cookiestore = await cookies();
+
+
+
+            const config: RequestInit = {
+                credentials: 'include', // Include cookies for authentication
+                headers: {
+                    'Content-Type': 'application/json',
+                    Cookie: cookiestore.toString(), // Pass auth cookies/session in headers
+                }
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate }
+            }
+
+            config.next = { ...config.next, tags: ["subject"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const data = await res.json();
+
+            return { data: data, error: null };
+        } catch (err) {
+            return { data: null, error: { message: "Something went wrong." } }
+        }
+    },
+
 
     getDeleteAvailabilitytById: async function (id: string, options?: ServiceOptions) {
         try {
@@ -323,6 +365,49 @@ export const tutorService = {
             return { data: null, error: { message: "Something went wrong during deletion." } };
         }
     },
+
+    getTutorProfileByIdForCommonLayout: async function (id: any, options?: ServiceOptions) {
+        const { data } = await userService.getSession();
+
+        // const session = data?.user || null;
+        // const id = session.id;
+        //   console.log("from navbar",session.id)
+        try {
+            const url = new URL(`${API_URL}/tutors/tutors-profile/${id}`);
+
+            const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+            const cookiestore = await cookies();
+
+
+
+            const config: RequestInit = {
+                credentials: 'include', // Include cookies for authentication
+                headers: {
+                    'Content-Type': 'application/json',
+                    Cookie: cookiestore.toString(), // Pass auth cookies/session in headers
+                }
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate }
+            }
+
+            config.next = { ...config.next, tags: ["subject"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const data = await res.json();
+
+            return { data: data, error: null };
+        } catch (err) {
+            return { data: null, error: { message: "Something went wrong." } }
+        }
+    },
+
 
 
 

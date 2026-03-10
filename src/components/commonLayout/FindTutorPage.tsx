@@ -9,8 +9,10 @@ import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Star, Search, MapPin, BookOpen } from "lucide-react";
 import Link from "next/link";
+import TutorCard from "./TutorCard";
 
-export default function FindTutorPage() {
+export default function FindTutorPage({ response }: { response: any }) {
+  console.log("chika  pika raika", response.data)
   return (
     <div className="container mx-auto py-8 px-4 mt-12">
       <div className="flex flex-col md:flex-row gap-8">
@@ -75,8 +77,12 @@ export default function FindTutorPage() {
         {/* RIGHT SIDE: Tutor Cards */}
         <main className="flex-1">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((i) => (
+            {/* {[1, 2, 3, 4].map((i) => (
               <TutorCard key={i} />
+            ))} */}
+
+            {response.data.map((tutor: any) => (
+              <TutorCard key={tutor.id} tutor={tutor} />
             ))}
           </div>
         </main>
@@ -85,42 +91,42 @@ export default function FindTutorPage() {
   );
 }
 
-function TutorCard() {
-  return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
-      <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-        <div className="h-16 w-16 rounded-full bg-slate-200 animate-pulse flex-shrink-0" />
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <h3 className="font-bold text-lg leading-none">Sarah Jenkins</h3>
-            <div className="flex items-center text-yellow-500 text-sm font-medium">
-              <Star className="fill-current w-4 h-4 mr-1" /> 4.9
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground mt-1">Senior Mathematics Tutor</p>
-        </div>
-      </CardHeader>
+// function TutorCard() {
+//   return (
+//     <Card className="overflow-hidden hover:shadow-md transition-shadow">
+//       <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+//         <div className="h-16 w-16 rounded-full bg-slate-200 animate-pulse flex-shrink-0" />
+//         <div className="flex-1">
+//           <div className="flex justify-between items-start">
+//             <h3 className="font-bold text-lg leading-none">Sarah Jenkins</h3>
+//             <div className="flex items-center text-yellow-500 text-sm font-medium">
+//               <Star className="fill-current w-4 h-4 mr-1" /> 4.9
+//             </div>
+//           </div>
+//           <p className="text-sm text-muted-foreground mt-1">Senior Mathematics Tutor</p>
+//         </div>
+//       </CardHeader>
 
-      <CardContent className="text-sm space-y-3">
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <BookOpen size={14} />
-          <span>Calculus, Algebra, Statistics</span>
-        </div>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <MapPin size={14} />
-          <span>Remote / New York</span>
-        </div>
-        <p className="line-clamp-2 text-zinc-600">
-          Helping students master complex concepts for over 8 years. Specialized in SAT/ACT preparation...
-        </p>
-      </CardContent>
+//       <CardContent className="text-sm space-y-3">
+//         <div className="flex items-center gap-2 text-muted-foreground">
+//           <BookOpen size={14} />
+//           <span>Calculus, Algebra, Statistics</span>
+//         </div>
+//         <div className="flex items-center gap-2 text-muted-foreground">
+//           <MapPin size={14} />
+//           <span>Remote / New York</span>
+//         </div>
+//         <p className="line-clamp-2 text-zinc-600">
+//           Helping students master complex concepts for over 8 years. Specialized in SAT/ACT preparation...
+//         </p>
+//       </CardContent>
 
-      <CardFooter className="flex gap-3 border-t bg-slate-50/50 pt-4">
-        <Link href={"/tutors/prof_7890123456"}>
-          <Button variant="outline" className="flex-1">View Profile</Button>
-        </Link>
-        <Button className="flex-1">Book Tutor</Button>
-      </CardFooter>
-    </Card>
-  );
-}
+//       <CardFooter className="flex gap-3 border-t bg-slate-50/50 pt-4">
+//         <Link href={"/tutors/Nwe432eloj4SX6mbQXY4Ot2k68udQwc2"}>
+//           <Button variant="outline" className="flex-1">View Profile</Button>
+//         </Link>
+//         <Button className="flex-1">Book Tutor</Button>
+//       </CardFooter>
+//     </Card>
+//   );
+// }
