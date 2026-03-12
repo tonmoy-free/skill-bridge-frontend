@@ -15,11 +15,11 @@ export const studentRoutes: Route[] = [
     items: [
       {
         title: "Statistics",
-        url: "/tutor-dashboard/statistics",
+        url: "/dashboard/statistics",
       },
       {
-        title: "Availability",
-        url: "/tutor-dashboard/availability",
+        title: "Bookings",
+        url: "/dashboard/bookings",
       },
       {
         title: "Student Profile",

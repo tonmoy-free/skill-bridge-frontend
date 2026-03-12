@@ -105,52 +105,154 @@ export const bookingService = {
     },
 
     createBookingIntoDB: async function (updateData: Partial<BookingData>, options?: ServiceOptions) {
-    try {
-        const url = new URL(`${API_URL}/dashboard/booking/`);
+        try {
+            const url = new URL(`${API_URL}/dashboard/booking/`);
 
-        const { cookies } = await import("next/headers");
-        const cookiestore = await cookies();
-        
-        const config: RequestInit = {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Cookie: cookiestore.toString(),
-            },
-            body: JSON.stringify(updateData),
-        };
+            const { cookies } = await import("next/headers");
+            const cookiestore = await cookies();
 
-        if (options?.cache) config.cache = options.cache;
-        if (options?.revalidate) config.next = { revalidate: options.revalidate };
-        config.next = { ...config.next, tags: ["booking"] };
+            const config: RequestInit = {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Cookie: cookiestore.toString(),
+                },
+                body: JSON.stringify(updateData),
+            };
 
-        const res = await fetch(url.toString(), config);
+            if (options?.cache) config.cache = options.cache;
+            if (options?.revalidate) config.next = { revalidate: options.revalidate };
+            config.next = { ...config.next, tags: ["booking"] };
 
-        // ১. রেসপন্সটি JSON এ কনভার্ট করুন
-        const result = await res.json();
+            const res = await fetch(url.toString(), config);
 
-        // ২. চেক করুন রেসপন্সটি সফল (200-299) কি না
-        if (!res.ok) {
-            // ব্যাকএন্ড থেকে পাঠানো { message: "This time slot is already booked" } এখানে রিটার্ন হবে
-            return { 
-                data: null, 
-                error: { message: result.message || "Failed to create booking" } 
+            // ১. রেসপন্সটি JSON এ কনভার্ট করুন
+            const result = await res.json();
+
+            // ২. চেক করুন রেসপন্সটি সফল (200-299) কি না
+            if (!res.ok) {
+                // ব্যাকএন্ড থেকে পাঠানো { message: "This time slot is already booked" } এখানে রিটার্ন হবে
+                return {
+                    data: null,
+                    error: { message: result.message || "Failed to create booking" }
+                };
+            }
+
+            // ৩. সফল হলে ডাটা রিটার্ন করুন
+            return { data: result, error: null };
+
+        } catch (err: any) {
+            // নেটওয়ার্ক এরর বা অন্য কোনো টেকনিক্যাল এরর
+            console.error("Fetch Error:", err);
+            return {
+                data: null,
+                error: { message: err.message || "Something went wrong." }
             };
         }
+    },
 
-        // ৩. সফল হলে ডাটা রিটার্ন করুন
-        return { data: result, error: null };
+    getMyBookingsFromDB: async function (params?: GetTutorProfileParams, options?: ServiceOptions) {
+        try {
+            const url = new URL(`${API_URL}/dashboard/booking/`);
 
-    } catch (err: any) {
-        // নেটওয়ার্ক এরর বা অন্য কোনো টেকনিক্যাল এরর
-        console.error("Fetch Error:", err);
-        return { 
-            data: null, 
-            error: { message: err.message || "Something went wrong." } 
-        };
+            const { cookies } = await import("next/headers");
+            const cookiestore = await cookies();
+
+            // url.searchParams.append("key", "value");
+            if (params) {
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value != undefined && value != null && value != "") {
+                        url.searchParams.append(key, value);
+                    }
+                })
+            }
+
+            const config: RequestInit = {
+                credentials: 'include', // Include cookies for authentication
+                headers: {
+                    'Content-Type': 'application/json',
+                    Cookie: cookiestore.toString(),
+                },
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate }
+            }
+
+            config.next = { ...config.next, tags: ["blogPosts"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const data = await res.json();
+
+            return { data: data, error: null };
+        } catch (err) {
+            return { data: null, error: { message: "Something went wrong." } }
+        }
+    },
+
+    cancelBookingFromDB: async function (
+        bookingId: string, // অবশ্যই bookingId নিতে হবে
+        options?: ServiceOptions
+    ) {
+        try {
+            // ১. URL-এ আইডি যুক্ত করা হয়েছে (আপনার API রাউট অনুযায়ী)
+            const url = `${API_URL}/dashboard/booking/${bookingId}`;
+
+            const { cookies } = await import("next/headers");
+            const cookiestore = await cookies();
+
+            // ২. ক্যান্সেল করার জন্য প্রয়োজনীয় ডাটা
+            const updateData = { status: "CANCELLED" };
+
+            const config: RequestInit = {
+                method: "PATCH",
+                credentials: 'include',
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookiestore.toString(),
+                },
+                body: JSON.stringify(updateData),
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            // ৩. ট্যাগ হিসেবে "bookings" ব্যবহার করা ভালো যাতে বুকিং লিস্ট আপডেট হয়
+            config.next = { ...config.next, tags: ["bookings"] };
+
+            const res = await fetch(url, config);
+
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                return {
+                    data: null,
+                    error: { message: errorData.message || "Cancellation failed" }
+                };
+            }
+
+            const data = await res.json();
+
+            // নেক্সট জেএস ক্যাশ ক্লিয়ার করার জন্য (অপশনাল কিন্তু রিকমেন্ডেড)
+            // revalidateTag("bookings"); 
+
+            return { data: data, error: null };
+
+        } catch (err) {
+            console.error("Cancel Fetch Error:", err);
+            return { data: null, error: { message: "Something went wrong during cancellation." } };
+        }
     }
-},
 
 
 
