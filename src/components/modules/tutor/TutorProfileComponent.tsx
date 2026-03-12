@@ -268,6 +268,7 @@ import { X, Save, GraduationCap, Banknote, LayoutGrid } from "lucide-react";
 import z from "zod";
 import Swal from "sweetalert2";
 import { finalUpdateCategoryById } from "@/actions/finalCategory.action";
+import { useRouter } from "next/navigation";
 
 
 // ১. ভ্যালিডেশন স্কিমা
@@ -291,6 +292,7 @@ export default function TutorProfileComponent({
     allCategory,
 }: TutorProfileComponentProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
 
     // ২. ফর্ম সেটআপ
     const form = useForm({
@@ -324,7 +326,12 @@ export default function TutorProfileComponent({
                     toast.error(res.error.message || "Something went wrong");
                     setIsSubmitting(false);
                 } else {
-                    toast.success("Profile updated successfully!", { id: toastId });
+                    toast.success("Profile updated successfully.", { id: toastId });
+                    // একটু সময় দিন যাতে টোস্ট মেসেজটি দেখা যায় এবং স্টেট আপডেট হয়
+                    setTimeout(() => {
+                        router.push("/tutor-dashboard/tutor-profile");
+                        router.refresh();
+                    }, 1000);
                 }
             } catch (err) {
                 toast.error("Something went wrong. Please try again.", { id: toastId });

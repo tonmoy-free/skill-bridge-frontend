@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import z from "zod";
@@ -46,14 +47,21 @@ export interface TutorProfileData {
 
 }
 
-export default function CreateTutorProfileComponent({ initialData }: { initialData: TutorProfileData }) {
-    console.log("Initial data received in component:", initialData);
+export default function CreateTutorProfileComponent() {
+    const router = useRouter();
+    // console.log("Initial data received in component:", initialData);
     const form = useForm({
+        // defaultValues: {
+        //     bio: initialData?.bio || "",
+        //     hourlyFee: initialData?.hourlyFee || 0, // Changed to number
+        //     monthlyFee: initialData?.monthlyFee || 0, // Changed to number
+        //     experience: initialData?.experience || 0, // Changed to number
+        // } as TutorFormValues,
         defaultValues: {
-            bio: initialData?.bio || "",
-            hourlyFee: initialData?.hourlyFee || 0, // Changed to number
-            monthlyFee: initialData?.monthlyFee || 0, // Changed to number
-            experience: initialData?.experience || 0, // Changed to number
+            bio: "",
+            hourlyFee: 0, // Changed to number
+            monthlyFee: 0, // Changed to number
+            experience: 0, // Changed to number
         } as TutorFormValues,
         validators: {
             onSubmit: formSchema,
@@ -68,7 +76,6 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                 });
                 return;
             }
-            console.log(value)
             const toastId = toast.loading("Creating Profile");
             try {
                 // Example call assuming you have the userId from elsewhere (e.g., props or auth hook)
@@ -80,6 +87,8 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                 }
 
                 toast.success("Profile created successfully", { id: toastId });
+                router.push("/tutor-dashboard/tutor-profile");
+                router.refresh();
                 form.reset();
             } catch (err) {
                 toast.error("Internal server error", { id: toastId });
@@ -98,11 +107,11 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                         </CardDescription>
                     </div>
                     <div>
-                        <Link href={`/tutor-dashboard/tutor-profile/${initialData?.id}`}>
+                        {/* <Link href={`/tutor-dashboard/tutor-profile/${initialData?.id}`}>
                             <Button form="create-subject-form" type="submit" className="">
                                 Edit Profile
                             </Button>
-                        </Link>
+                        </Link> */}
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -122,7 +131,6 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         id={field.name}
                                         value={field.state.value}
                                         onChange={(e) => field.handleChange(e.target.value)}
-                                        readOnly
                                     />
                                     {field.state.meta.isTouched && (
                                         <FieldError errors={field.state.meta.errors} />
@@ -139,7 +147,7 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         placeholder="0"
                                         id={field.name}
                                         value={field.state.value}
-                                        readOnly
+
                                         // Conversion: String to Number
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                     />
@@ -158,7 +166,7 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         placeholder="0"
                                         id={field.name}
                                         value={field.state.value}
-                                        readOnly
+
                                         // Conversion: String to Number
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                     />
@@ -177,7 +185,7 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                                         placeholder="0"
                                         id={field.name}
                                         value={field.state.value}
-                                        readOnly
+
                                         // Conversion: String to Number
                                         onChange={(e) => field.handleChange(Number(e.target.value))}
                                     />
@@ -189,8 +197,8 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                         </FieldGroup>
                     </form>
                 </CardContent>
-                {/* <CardFooter className="flex justify-end flex-col gap-5">
-                    {initialData ? (
+                <CardFooter className="flex justify-end flex-col gap-5">
+                    {/* {initialData ? (
                         <Button disabled form="create-subject-form" type="submit" className="w-full cursor-pointer">
                             Create Profile
                         </Button>
@@ -198,8 +206,11 @@ export default function CreateTutorProfileComponent({ initialData }: { initialDa
                         <Button form="create-subject-form" type="submit" className="w-full">
                             Create Profile
                         </Button>
-                    )}
-                </CardFooter> */}
+                    )} */}
+                    <Button form="create-subject-form" type="submit" className="w-full">
+                        Create Profile
+                    </Button>
+                </CardFooter>
             </Card>
         </div>
     );

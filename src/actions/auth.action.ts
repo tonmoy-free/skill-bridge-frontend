@@ -1,6 +1,7 @@
 "use server";
 
 import { authClient } from "@/lib/auth-client";
+import { userService } from "@/services/user.service";
 import { revalidatePath } from "next/cache";
 
 export async function logoutUser() {
@@ -16,3 +17,4 @@ export async function logoutUser() {
     return { success: false, error: "Logout failed" };
   }
 }
+

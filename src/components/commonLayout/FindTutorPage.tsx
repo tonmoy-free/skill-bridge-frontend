@@ -11,8 +11,8 @@ import { Star, Search, MapPin, BookOpen } from "lucide-react";
 import Link from "next/link";
 import TutorCard from "./TutorCard";
 
-export default function FindTutorPage({ response }: { response: any }) {
-  console.log("chika  pika raika", response.data)
+export default function FindTutorPage({ response ,data}: { response: any ,data:any}) {
+  
   return (
     <div className="container mx-auto py-8 px-4 mt-12">
       <div className="flex flex-col md:flex-row gap-8">
@@ -82,7 +82,7 @@ export default function FindTutorPage({ response }: { response: any }) {
             ))} */}
 
             {response.data.map((tutor: any) => (
-              <TutorCard key={tutor.id} tutor={tutor} />
+              <TutorCard key={tutor.id} tutor={tutor} data={data}/>
             ))}
           </div>
         </main>

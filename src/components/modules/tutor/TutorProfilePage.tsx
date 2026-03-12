@@ -13,7 +13,19 @@ const getDayName = (day: number) => {
 };
 
 export default function TutorProfilePage({ data }: { data: any }) {
-    const { id, user, categories, availability, bio, hourlyFee, monthlyFee, experience, rating } = data;
+    // const { id, user, categories, availability, bio, hourlyFee, monthlyFee, experience, rating } = data;
+    // data যদি undefined হয় তার জন্য {} এবং প্রতিটি প্রোপার্টির জন্য ডিফল্ট ভ্যালু
+    const {
+        id = "",
+        user = { name: "Unknown", email: "", image: "" },
+        categories = [],
+        availability = [],
+        bio = "No bio available.",
+        hourlyFee = 0,
+        monthlyFee = 0,
+        experience = 0,
+        rating = 0
+    } = data || {};
     console.log("ddddd", data)
 
     return (
@@ -21,21 +33,21 @@ export default function TutorProfilePage({ data }: { data: any }) {
             {/* Top Profile Header */}
             <div className="flex flex-col md:flex-row gap-6 items-center md:items-start bg-card border p-6 rounded-2xl shadow-sm ">
                 <Avatar className="h-24 w-24 border-2 border-primary/10">
-                    <AvatarImage src={user.image} />
-                    <AvatarFallback className="text-xl bg-primary/5">{user.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user?.image} />
+                    <AvatarFallback className="text-xl bg-primary/5">{user?.name.charAt(0)}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1 space-y-3 text-center md:text-left">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">{user.name}</h1>
-                        <p className="text-muted-foreground">{user.email}</p>
+                        <h1 className="text-3xl font-bold tracking-tight">{user?.name}</h1>
+                        <p className="text-muted-foreground">{user?.email}</p>
                     </div>
 
                     <div className="flex flex-wrap justify-center md:justify-start gap-3">
                         <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                            {categories?.map((cat: any) => (
-                                <Badge key={cat.id} variant="outline" className="bg-slate-50">
-                                    {cat.name}
+                            {categories?.map((cat?: any) => (
+                                <Badge key={cat?.id} variant="outline" className="bg-slate-50">
+                                    {cat?.name}
                                 </Badge>
                             ))}
                         </div>
@@ -81,14 +93,14 @@ export default function TutorProfilePage({ data }: { data: any }) {
                             <Card>
                                 <CardContent className="pt-6">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {availability.map((slot: any) => (
+                                        {availability.map((slot?: any) => (
                                             <div key={slot.id} className="flex items-center justify-between p-3 border rounded-lg bg-slate-50/50">
                                                 <div className="flex items-center gap-3">
                                                     <Calendar size={16} className="text-primary" />
-                                                    <span className="font-medium text-sm">{getDayName(slot.dayOfWeek)}</span>
+                                                    <span className="font-medium text-sm">{getDayName(slot?.dayOfWeek)}</span>
                                                 </div>
                                                 <div className="text-xs font-mono bg-white px-2 py-1 rounded border shadow-sm">
-                                                    {slot.startTime} - {slot.endTime}
+                                                    {slot?.startTime} - {slot?.endTime}
                                                 </div>
                                             </div>
                                         ))}
