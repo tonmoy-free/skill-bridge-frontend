@@ -1,13 +1,14 @@
 "use client"
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, User } from "lucide-react";
+import { Calendar, Clock, Star, User } from "lucide-react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cancelBookingFromDB } from "@/actions/booking.action";
+import ReviewModal from "./ReviewModal";
 
 export default function BookingCard({ booking, isUpcoming }: { booking: any, isUpcoming: boolean }) {
     const statusColors: any = {
@@ -76,15 +77,16 @@ export default function BookingCard({ booking, isUpcoming }: { booking: any, isU
                     </div>
 
                     <div className="flex gap-2">
-                        {isUpcoming && booking.status === "BOOKED" && (
-                            <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={handleCancel}
-                                className="bg-red-50 text-red-600 hover:bg-red-100 border-none shadow-none"
-                            >
-                                Cancel Booking
-                            </Button>
+                        {/* সেশন কমপ্লিট হলে এবং রিভিউ না থাকলে */}
+                        {!isUpcoming && booking.status === "COMPLETED" && !booking.review && (
+                            <ReviewModal booking={booking} />
+                        )}
+
+                        {/* যদি অলরেডি রিভিউ দেওয়া থাকে */}
+                        {booking.review && (
+                            <div className="flex items-center gap-1 text-yellow-600 font-medium text-sm">
+                                <Star size={14} className="fill-current" /> {booking.review.rating}/5
+                            </div>
                         )}
                     </div>
                 </div>

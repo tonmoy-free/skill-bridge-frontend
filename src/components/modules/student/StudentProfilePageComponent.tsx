@@ -6,13 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Phone, Calendar, ShieldCheck, User as UserIcon } from "lucide-react";
+import Link from "next/link";
 
 
 export default function StudentProfilePageComponent({ user }: { user: any }) {
   return (
     <div className="container mx-auto py-10 max-w-4xl">
       <div className="flex flex-col md:flex-row gap-8 items-start">
-        
+
         {/* Left Column: Profile Card */}
         <Card className="w-full md:w-1/3">
           <CardContent className="pt-6 text-center">
@@ -51,19 +52,19 @@ export default function StudentProfilePageComponent({ user }: { user: any }) {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="flex items-center gap-2"><Mail size={14}/> Email</Label>
+                      <Label className="flex items-center gap-2"><Mail size={14} /> Email</Label>
                       <div className="flex items-center gap-2">
                         <Input value={user.email} readOnly className="bg-muted/50" />
                         {user.emailVerified && <ShieldCheck className="text-green-500" size={20} />}
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="flex items-center gap-2"><Phone size={14}/> Phone</Label>
+                      <Label className="flex items-center gap-2"><Phone size={14} /> Phone</Label>
                       <Input value={user.phone || "Not provided"} readOnly className="bg-muted/50" />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2"><Calendar size={14}/> Joined On</Label>
+                    <Label className="flex items-center gap-2"><Calendar size={14} /> Joined On</Label>
                     <p className="text-sm border p-2 rounded-md bg-muted/30">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </p>
@@ -79,14 +80,16 @@ export default function StudentProfilePageComponent({ user }: { user: any }) {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* This is where your form from previous questions would go */}
+                  <Link href={`/dashboard/student-profile/${user.id}`}>
                   <Button variant="outline" className="w-full">Edit Profile Details</Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-
+                </Link>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
+
     </div>
+    </div >
   );
 }
