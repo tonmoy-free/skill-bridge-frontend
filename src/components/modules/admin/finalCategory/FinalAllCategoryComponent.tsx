@@ -110,7 +110,14 @@ const FinalAllCategoryTable = () => {
 
     return (
         <div className="overflow-x-auto p-5">
-            <table className="table table-zebra w-full border border-base-300 shadow-md">
+            {/* Header Area */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-3xl font-bold tracking-tight">All Category</h2>
+                    <p className="text-muted-foreground mt-2">All Category that are currently active or pending.</p>
+                </div>
+            </div>
+            <table className="table table-zebra w-full border border-base-300 shadow-md mt-8">
                 {/* Table Head */}
                 <thead className="bg-base-200 text-base-content">
                     <tr>

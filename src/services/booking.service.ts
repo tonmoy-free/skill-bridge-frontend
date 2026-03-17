@@ -29,6 +29,10 @@ export const bookingService = {
         try {
             const url = new URL(`${API_URL}/dashboard/booking/`);
 
+            // Get cookies for authentication
+            const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+            const cookiestore = await cookies();
+
             // url.searchParams.append("key", "value");
             if (params) {
                 Object.entries(params).forEach(([key, value]) => {
@@ -41,8 +45,9 @@ export const bookingService = {
             const config: RequestInit = {
                 credentials: 'include', // Include cookies for authentication
                 headers: {
-                    'Content-Type': 'application/json',
-                }
+                    "Content-Type": "application/json",
+                    Cookie: cookiestore.toString(),
+                },
             };
 
             if (options?.cache) {

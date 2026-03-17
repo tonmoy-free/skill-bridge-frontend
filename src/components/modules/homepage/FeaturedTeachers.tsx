@@ -4,6 +4,7 @@ import { Star, Clock, Briefcase, Mail } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { getAllTutorProfile } from "@/actions/tutor.action";
 
 // Demo Data matching your JSON structure
 const featuredTeachers = [
@@ -45,7 +46,10 @@ const featuredTeachers = [
     },
 ];
 
-const FeaturedTeachers = () => {
+export default async function FeaturedTeachers() {
+
+    const allTutor = await getAllTutorProfile();
+    console.log("all tutor....",allTutor.data)
     return (
         <section className="py-20 bg-background">
             <div className="container mx-auto px-4">
@@ -138,5 +142,3 @@ const FeaturedTeachers = () => {
         </section>
     );
 };
-
-export default FeaturedTeachers;

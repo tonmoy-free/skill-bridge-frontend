@@ -14,38 +14,33 @@ export function AccordionDemo() {
             className=" container mx-auto"
         >
             <AccordionItem value="shipping">
-                <AccordionTrigger>What are your shipping options?</AccordionTrigger>
+                <AccordionTrigger>Q1: How can I find the right tutor for my needs?</AccordionTrigger>
                 <AccordionContent>
-                    We offer standard (5-7 days), express (2-3 days), and overnight
-                    shipping. Free shipping on international orders.
+                    A: You can use our search filters to find tutors by subject, class, location, or price range. Each tutor has a detailed profile with their qualifications, experience, and student reviews to help you decide.
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="returns">
-                <AccordionTrigger>What is your return policy?</AccordionTrigger>
+                <AccordionTrigger>Q2: Are the tutors on this platform verified?</AccordionTrigger>
                 <AccordionContent>
-                    Returns accepted within 30 days. Items must be unused and in original
-                    packaging. Refunds processed within 5-7 business days.
+                    A: Yes, we take security seriously. All our tutors go through a multi-step verification process, including NID/Identity check and academic document verification, to ensure they are qualified and trustworthy.
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="support">
-                <AccordionTrigger>How can I contact customer support?</AccordionTrigger>
+                <AccordionTrigger>Q3: How do I book a session with a tutor?</AccordionTrigger>
                 <AccordionContent>
-                    Reach us via email, live chat, or phone. We respond within 24 hours
-                    during business days.
+                    A: Once you find a tutor you like, click the "Book a Session" or "Request for Tutor" button. You can choose your preferred time slots from the tutor’s availability calendar.
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="s">
-                <AccordionTrigger>How can I contact customer support?</AccordionTrigger>
+                <AccordionTrigger>Q4: Can I request a demo class before confirming?</AccordionTrigger>
                 <AccordionContent>
-                    Reach us via email, live chat, or phone. We respond within 24 hours
-                    during business days.
+                    A: Many of our tutors offer a free or discounted 20-minute demo session. Check the "Demo Available" badge on the tutor's profile.
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="d">
-                <AccordionTrigger>How can I contact customer support?</AccordionTrigger>
+                <AccordionTrigger>Q5: What happens if I am not satisfied with a tutor?</AccordionTrigger>
                 <AccordionContent>
-                    Reach us via email, live chat, or phone. We respond within 24 hours
-                    during business days.
+                    A: We have a "Tutor Love Guarantee." If you are not satisfied after the first session, let us know, and we will help you find a replacement or process a refund based on our policy.
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

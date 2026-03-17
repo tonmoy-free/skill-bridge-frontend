@@ -37,16 +37,19 @@ export default async function Home() {
       <div >
         <MainBanner></MainBanner>
       </div>
-      <div>
+      {/* <div>
         <FeaturedTeachers />
-      </div>
+      </div> */}
       <div>
+        <ProTutorsSlider  tutors={data || []}/>
+      </div>
+      {/* <div>
         <div className="grid grid-cols-3 max-w-7xl mx-auto px-4 gap-5">
           {data?.map((post: TutorProfile) => (
             <TutorCard key={post.id} post={post} />
           ))}
         </div>
-      </div>
+      </div> */}
       <div>
         <StartTutoringWithUs />
       </div>
@@ -59,9 +62,7 @@ export default async function Home() {
       <div>
         <TestimonialSlider />
       </div>
-      <div>
-        <ProTutorsSlider />
-      </div>
+
       <div>
         <Footer2 />
       </div>

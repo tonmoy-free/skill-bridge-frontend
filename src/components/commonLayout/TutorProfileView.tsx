@@ -17,7 +17,7 @@ import {
 import defaultTutor from "../../../public/Image/defaultTutor.png";
 
 export default function TutorProfileView({ profile }: { profile: any }) {
-    const { user, categories, availability, reviews, experience, rating, hourlyFee, monthlyFee, bio } = profile.data;
+    const { user, categories, availability, reviews, experience, rating, hourlyFee, monthlyFee, bio } = profile.data || {};
     console.log("this is from profile", profile)
     const imageSrc = user.image ? user.image : defaultTutor.src;
 
@@ -132,10 +132,10 @@ export default function TutorProfileView({ profile }: { profile: any }) {
                                             <div className="flex justify-between items-start">
                                                 <div className="flex items-center gap-2">
                                                     <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs uppercase">
-                                                        {review.user.name.charAt(0)}
+                                                        {review?.user?.name.charAt(0)}
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm font-semibold">{review.user.name}</p>
+                                                        <p className="text-sm font-semibold">{review?.user?.name}</p>
                                                         <p className="text-[10px] text-muted-foreground">
                                                             {new Date(review.createdAt).toLocaleDateString()}
                                                         </p>
@@ -146,12 +146,12 @@ export default function TutorProfileView({ profile }: { profile: any }) {
                                                         <Star
                                                             key={i}
                                                             size={14}
-                                                            className={i < Math.floor(review.rating) ? "fill-current" : "text-slate-300"}
+                                                            className={i < Math.floor(review?.rating) ? "fill-current" : "text-slate-300"}
                                                         />
                                                     ))}
                                                 </div>
                                             </div>
-                                            <p className="text-sm text-slate-600 pl-10 italic">"{review.comment}"</p>
+                                            <p className="text-sm text-slate-600 pl-10 italic">"{review?.comment}"</p>
                                         </div>
                                     ))
                                 ) : (

@@ -128,6 +128,13 @@ const AllCategoryComponent = () => {
 
     return (
         <div className="overflow-x-auto p-5">
+            {/* Header Area */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-3xl font-bold tracking-tight">All Booking</h2>
+                    <p className="text-muted-foreground">All booking that are currently active or pending.</p>
+                </div>
+            </div>
             <table className="table table-zebra w-full border border-base-300 shadow-md">
                 {/* Table Head */}
                 <thead className="bg-base-200 text-base-content">
