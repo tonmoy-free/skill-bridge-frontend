@@ -8,10 +8,10 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
-import { updateStudentProfileById } from "@/actions/student.action";
+import { updateTutorUserProfileById } from "@/actions/tutor.action";
 
 
-export default function EditProfilePage({ user }: { user: any }) {
+export default function EditTutorUserProfilePage({ user }: { user: any }) {
   const router = useRouter();
 
   // TanStack Form Initialization
@@ -35,7 +35,7 @@ export default function EditProfilePage({ user }: { user: any }) {
 
       const toastId = toast.loading("Updating profile...");
 
-      const res = await updateStudentProfileById(user.id, updatedFields, 10);
+      const res = await updateTutorUserProfileById(user.id, updatedFields, 10);
       console.log("updatedFields", updatedFields)
 
       if (res.error) {
@@ -44,7 +44,7 @@ export default function EditProfilePage({ user }: { user: any }) {
         toast.success("Profile updated successfully!", { id: toastId });
 
         setTimeout(() => {
-          router.push("/dashboard/student-profile");
+          router.push("/tutor-dashboard/tutor-user-profile");
         }, 1000);
         router.refresh();
       }

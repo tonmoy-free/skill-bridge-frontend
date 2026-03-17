@@ -24,6 +24,18 @@ export const tutorRoutes: Route[] = [
       {
         title: "Tutor Profile",
         url: "/tutor-dashboard/tutor-profile",
+      },
+      {
+        title: "User Profile",
+        url: "/tutor-dashboard/tutor-user-profile",
+      },
+      {
+        title: "Teaching Sessions",
+        url: "/tutor-dashboard/teaching-sessions",
+      },
+      {
+        title: "Ratings and Reviews",
+        url: "/tutor-dashboard/ratings-and-reviews",
       }
     ],
   },

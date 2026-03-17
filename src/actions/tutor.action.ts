@@ -1,5 +1,6 @@
 "use server";
 
+import { UserData } from "@/services/manageUser.service";
 import { CreateAvailabilityData, CreateTutorProfileData, ID, tutorService } from "@/services/tutor.service";
 
 
@@ -33,6 +34,23 @@ export const getDeleteAvailabilitytById = async (params?: any, revalidate?: numb
 
 export const getTutorProfileByIdForCommonLayout = async (id: any, revalidate?: number) => {
     return await tutorService.getTutorProfileByIdForCommonLayout(id, { revalidate });
+};
+
+export const getSingleTutorUserById = async (id: any, revalidate?: number) => {
+    return await tutorService.getSingleTutorUserById(id, { revalidate });
+};
+
+export const updateTutorUserProfileById = async (id: string, updateData: Partial<UserData>, revalidate?: number) => {
+    return await tutorService.updateTutorUserProfileById(id, updateData, { revalidate });
+};
+
+export const getSingleBookingTutorUserById = async (id: string, revalidate?: number) => {
+    return await tutorService.getSingleBookingTutorUserById(id, { revalidate });
+};
+
+
+export const getSingleTutorAllReviewById = async (id: string, revalidate?: number) => {
+    return await tutorService.getSingleTutorAllReviewById(id, { revalidate });
 };
 
 
