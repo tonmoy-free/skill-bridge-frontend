@@ -1,14 +1,43 @@
+"use client"
+
 // components/dashboard/tutor/TeachingSessionCard.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Clock, User } from "lucide-react";
+import { Calendar, CheckCircle2, Clock, User } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { updateBookingFromDB } from "@/actions/booking.action";
+import { useRouter } from "next/navigation";
+
 
 export default function TeachingSessionCardComponent({ booking }: { booking: any }) {
   const statusColors: any = {
     BOOKED: "bg-blue-500",
     COMPLETED: "bg-green-500",
     CANCELLED: "bg-red-500",
+  };
+
+  const router = useRouter();
+
+  const handleComplete = async () => {
+    const toastId = toast.loading("Updating session status...");
+
+    try {
+      const res = await updateBookingFromDB(booking.id);
+
+      
+      if (res.error) {
+        toast.error(res.error.message || "Something went wrong", { id: toastId });
+      } else {
+        // যদি এরর না থাকে (অর্থাৎ res.data আছে), তবে এটি সফল
+        toast.success("Session marked as completed!", { id: toastId });
+        router.refresh();
+        window.location.reload();
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred", { id: toastId });
+    }
   };
 
   return (
@@ -23,11 +52,25 @@ export default function TeachingSessionCardComponent({ booking }: { booking: any
             </Avatar>
             <div>
               <h4 className="font-bold flex items-center gap-2">
-                {booking.student.name} 
+                {booking.student.name}
                 <Badge className={statusColors[booking.status]}>{booking.status}</Badge>
               </h4>
               <p className="text-sm text-muted-foreground">{booking.student.email}</p>
             </div>
+          </div>
+          <div>
+            {/* যদি স্ট্যাটাস BOOKED থাকে তবেই Complete বাটন দেখাবে */}
+            {booking.status === "BOOKED" && (
+              <Button
+                onClick={handleComplete}
+                size="sm"
+                className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+              >
+                <CheckCircle2 size={16} />
+                Mark as Completed
+              </Button>
+            )}
+
           </div>
 
           {/* Session Details */}

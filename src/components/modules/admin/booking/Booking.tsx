@@ -56,9 +56,11 @@ export default function BookingPage() {
                 setError(null);
                 const response = await getBookings();
                 console.log("Full API Response:", response);
-                console.log("Response Data Type:", typeof response.data);
+                console.log("Response Data Type:", typeof response?.data?.[0]?.tutor.user.name);
+                const tutorName = response?.data.data?.[0]?.tutor.user.name;
+                console.log("Tutor Name:", tutorName); // আউটপুট: "Rahim"
                 console.log("Response Data:", response.data);
-                
+
                 // Handle the response structure { data, error }
                 if (response.error) {
                     setError(response.error.message);
@@ -71,7 +73,7 @@ export default function BookingPage() {
                 // If data is an array, use it directly
                 if (Array.isArray(response.data)) {
                     bookingsArray = response.data as Booking[];
-                } 
+                }
                 // If data has a bookings property (array)
                 else if (response.data?.bookings && Array.isArray(response.data.bookings)) {
                     bookingsArray = response.data.bookings as Booking[];
@@ -123,6 +125,7 @@ export default function BookingPage() {
     const startCount = totalBooking === 0 ? 0 : indexOfFirstItem + 1;
     const endCount = totalBooking === 0 ? 0 : Math.min(indexOfFirstItem + filteredBooking.length, totalBooking);
     const currentItems = filteredBooking;
+    console.log("currentItems",currentItems)
     return (
         <div className="w-full p-6 space-y-6 bg-white dark:bg-slate-950 min-h-screen">
             {/* Header Area */}
@@ -154,12 +157,12 @@ export default function BookingPage() {
             <div className="flex items-center gap-3">
                 <label className="text-sm text-muted-foreground">Per page:</label>
                 <select
-                    // value={itemsPerPage}
-                    // onChange={(e) => {
-                    //     const v = parseInt(e.target.value, 10) || 10;
-                    //     setItemsPerPage(v);
-                    //     setCurrentPage(1);
-                    // }}
+                    value={itemsPerPage}
+                    onChange={(e) => {
+                        const v = parseInt(e.target.value, 10) || 10;
+                        setItemsPerPage(v);
+                        setCurrentPage(1);
+                    }}
                     className="px-2 py-1 rounded border bg-white dark:bg-slate-900 text-sm"
                 >
                     <option value={10}>10</option>
@@ -222,7 +225,7 @@ export default function BookingPage() {
                                     <TableCell>
                                         <div className="flex flex-col">
                                             <span className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
-                                                Tutor
+                                                Tutor: {item?.tutor.user.name || "-"}
                                             </span>
                                             <span className="text-xs text-muted-foreground">
                                                 Fee: ৳{item.tutor?.hourlyFee || "-"}/hour
@@ -239,8 +242,8 @@ export default function BookingPage() {
                                                 item.status === "BOOKED" || item.status === "CONFIRMED"
                                                     ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
                                                     : item.status === "PENDING"
-                                                    ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                                    : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                                                        ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                                             )}
                                         >
                                             {item.status || "PENDING"}

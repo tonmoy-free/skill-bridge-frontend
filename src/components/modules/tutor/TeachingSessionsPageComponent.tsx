@@ -16,8 +16,6 @@ export default async function TeachingSessionsPageComponent() {
   const sessions = res.data.data || [];
   console.log(res.data.data)
 
-
-  // Dummy Data for testing
   // const sessions = [
   //   {
   //     id: "1",

@@ -10,6 +10,7 @@ export default async function BookingsPage() {
   
   // ১. রেসপন্সটি কল করুন
   const response = await getMyBookingsFromDB();
+  console.log("response",response)
 
   // ২. আপনার JSON অনুযায়ী ডাটা এক্সেস করুন
   // যেহেতু অ্যাকশন রিটার্ন করে { data: ... }, আর আপনার JSON এর ভেতরেও আছে "data": [...]

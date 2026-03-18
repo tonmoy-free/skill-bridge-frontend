@@ -9,6 +9,7 @@ import Marquee from "react-fast-marquee";
 import verifiedTutorIcon from "../.././../../public/Image/verifiedTutorIcon.png";
 import tutionIcon from "../.././../../public/Image/tutionIcon.png";
 import tutionMatched from "../.././../../public/Image/tutionMatched.png";
+import Link from "next/link";
 
 
 
@@ -182,12 +183,16 @@ export default function MainBanner() {
 
                     {/* Buttons */}
                     <div className="button flex gap-5">
-                        <button className="md:w-64 w-40 h-10 md:h-14 border-black dark:border-white border-2 rounded-md md:text-xl text-[14px] font-bold cursor-pointer hover:bg-white dark:hover:bg-slate-100 dark:hover:text-black dark:text-white transition-all duration-300">
-                            Find Tutors
-                        </button>
-                        <button className="md:w-64 w-40 h-10 md:h-14 border-black dark:border-white border-2 rounded-md md:text-xl text-[14px] font-bold cursor-pointer hover:bg-white dark:hover:bg-slate-100 dark:hover:text-black dark:text-white transition-all duration-300">
-                            Request For Tutors
-                        </button>
+                        <Link href={"/tutors"}>
+                            <button className="md:w-64 w-40 h-10 md:h-14 border-black dark:border-white border-2 rounded-md md:text-xl text-[14px] font-bold cursor-pointer hover:bg-white dark:hover:bg-slate-100 dark:hover:text-black dark:text-white transition-all duration-300">
+                                Find Tutors
+                            </button>
+                        </Link>
+                        <Link href={"/register"}>
+                            <button className="md:w-64 w-40 h-10 md:h-14 border-black dark:border-white border-2 rounded-md md:text-xl text-[14px] font-bold cursor-pointer hover:bg-white dark:hover:bg-slate-100 dark:hover:text-black dark:text-white transition-all duration-300">
+                                Request For Tutors
+                            </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -198,23 +203,23 @@ export default function MainBanner() {
 
                 {/* Bottom Info Cards - ইতিমধ্যে আপনার কোডে dark:bg-slate-900 আছে, আমি শুধু বর্ডারগুলো অ্যাডজাস্ট করে দিচ্ছি */}
                 <div className="absolute hidden -bottom-13 left-0 right-0 w-full overflow-hidden md:flex items-center justify-center gap-6">
-                    <InfoCard 
-                        bg="bg-[#e3ffe9]" 
-                        icon={verifiedTutorIcon} 
-                        title="Tutor" 
-                        desc="32.2K Verified Tutors" 
+                    <InfoCard
+                        bg="bg-[#e3ffe9]"
+                        icon={verifiedTutorIcon}
+                        title="Tutor"
+                        desc="32.2K Verified Tutors"
                     />
-                    <InfoCard 
-                        bg="bg-[#deedff]" 
-                        icon={tutionIcon} 
-                        title="Tuitions" 
-                        desc="24/7 Available Tuition" 
+                    <InfoCard
+                        bg="bg-[#deedff]"
+                        icon={tutionIcon}
+                        title="Tuitions"
+                        desc="24/7 Available Tuition"
                     />
-                    <InfoCard 
-                        bg="bg-[#fbf7c6]" 
-                        icon={tutionMatched} 
-                        title="Tuitions Matched" 
-                        desc="2,076 Tuition Confirmed" 
+                    <InfoCard
+                        bg="bg-[#fbf7c6]"
+                        icon={tutionMatched}
+                        title="Tuitions Matched"
+                        desc="2,076 Tuition Confirmed"
                     />
                 </div>
             </div>

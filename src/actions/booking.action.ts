@@ -19,3 +19,7 @@ export const getMyBookingsFromDB = async () => {
 export const cancelBookingFromDB = async (bookingId: string, revalidate?: number) => {
     return await bookingService.cancelBookingFromDB(bookingId);
 };
+
+export const updateBookingFromDB = async (bookingId: string, revalidate?: number) => {
+    return await bookingService.updateBookingFromDB(bookingId);
+};
