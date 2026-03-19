@@ -13,9 +13,12 @@ interface ServiceOptions {
     revalidate?: number;
 }
 
-interface GetTutorProfileParams {
+export interface GetTutorProfileParams {
     isFeatured?: boolean;
     search?: string;
+    categoryId?: string;
+    maxPrice?: number;
+    minRating?: number;
 }
 
 export interface ID {
@@ -275,48 +278,92 @@ export const tutorService = {
         }
     },
 
-    getAllTutorProfile: async function (options?: ServiceOptions ,par?:GetTutorProfileParams) {
-        const { data } = await userService.getSession();
+    // getAllTutorProfile: async function (options?: ServiceOptions ,par?:GetTutorProfileParams) {
+    //     const { data } = await userService.getSession();
 
-        // const session = data?.user || null;
-        // const id = session.id;
-        //   console.log("from navbar",session.id)
+    //     // const session = data?.user || null;
+    //     // const id = session.id;
+    //     //   console.log("from navbar",session.id)
+    //     try {
+    //         const url = new URL(`${API_URL}/tutors/tutors-profile`);
+
+    //         const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+    //         const cookiestore = await cookies();
+
+
+
+    //         const config: RequestInit = {
+    //             credentials: 'include', // Include cookies for authentication
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Cookie: cookiestore.toString(), // Pass auth cookies/session in headers
+    //             }
+    //         };
+
+    //         if (options?.cache) {
+    //             config.cache = options.cache;
+    //         }
+
+    //         if (options?.revalidate) {
+    //             config.next = { revalidate: options.revalidate }
+    //         }
+
+    //         config.next = { ...config.next, tags: ["subject"] };
+
+    //         const res = await fetch(url.toString(), config);
+
+    //         const data = await res.json();
+
+    //         return { data: data, error: null };
+    //     } catch (err) {
+    //         return { data: null, error: { message: "Something went wrong." } }
+    //     }
+    // },
+
+    getAllTutorProfile: async function (options?: ServiceOptions, par?: GetTutorProfileParams) {
         try {
             const url = new URL(`${API_URL}/tutors/tutors-profile`);
 
-            const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+            // ১. সার্চ প্যারামিটারগুলো ইউআরএল-এ যুক্ত করা
+            if (par) {
+                Object.entries(par).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== "") {
+                        url.searchParams.append(key, value.toString());
+                    }
+                });
+            }
+
+            const { cookies } = await import("next/headers");
             const cookiestore = await cookies();
 
-
-
             const config: RequestInit = {
-                credentials: 'include', // Include cookies for authentication
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    Cookie: cookiestore.toString(), // Pass auth cookies/session in headers
+                    Cookie: cookiestore.toString(),
                 }
             };
 
-            if (options?.cache) {
-                config.cache = options.cache;
-            }
-
-            if (options?.revalidate) {
-                config.next = { revalidate: options.revalidate }
-            }
+            // ক্যাশ এবং রিভ্যালিডেশন হ্যান্ডলিং
+            if (options?.cache) config.cache = options.cache;
+            if (options?.revalidate) config.next = { revalidate: options.revalidate };
 
             config.next = { ...config.next, tags: ["subject"] };
 
             const res = await fetch(url.toString(), config);
 
-            const data = await res.json();
+            if (!res.ok) {
+                throw new Error("Failed to fetch data");
+            }
 
+            const data = await res.json();
             return { data: data, error: null };
-        } catch (err) {
-            return { data: null, error: { message: "Something went wrong." } }
+
+        } catch (err: any) {
+            console.error("Fetch Error:", err);
+            return { data: null, error: { message: err.message || "Something went wrong." } };
         }
     },
-
 
     getDeleteAvailabilitytById: async function (id: string, options?: ServiceOptions) {
         try {
@@ -448,57 +495,57 @@ export const tutorService = {
 
 
     updateTutorUserProfileById: async function (id: string, updateData: Partial<UserData>, options?: ServiceOptions) {
-            try {
-                const url = `${API_URL}/tutors/tutors-profile/user/${id}`; // ডাইরেক্ট স্ট্রিং ইন্টারপোলেশন
-                
-                // Get cookies for authentication
-                const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
-                const cookiestore = await cookies(); // Get the cookies store for send login user token or session in header for authentication 
-    
-                const config: RequestInit = {
-                    method: "PATCH", // <--- এটি অবশ্যই যোগ করতে হবে
-                    credentials: 'include', // কুকি বা সেশন পাঠানোর জন্য
-                    headers: {
-                        "Content-Type": "application/json",
-                        Cookie: cookiestore.toString(),
-                    },
-                    body: JSON.stringify(updateData),
-                };
-    
-                if (options?.cache) {
-                    config.cache = options.cache;
-                }
-    
-                // Next.js স্পেসিফিক ক্যাশ লজিক (যদি প্রয়োজন হয়)
-                if (options?.revalidate) {
-                    config.next = { revalidate: options.revalidate };
-                }
-    
-                // রিভ্যালিডেশনের জন্য ট্যাগ (যেমন: ডিলিট করার পর লিস্ট আপডেট হবে)
-                config.next = { ...config.next, tags: ["user"] };
-    
-                const res = await fetch(url, config);
-    
-                // যদি রেসপন্স ঠিক না থাকে (যেমন: ৪০১, ৪০৪ বা ৪০০ এরর)
-                if (!res.ok) {
-                    const errorData = await res.json().catch(() => ({}));
-                    return {
-                        data: null,
-                        error: { message: errorData.error || errorData.message || "Update failed" }
-                    };
-                }
-    
-                const data = await res.json();
-                return { data: data, error: null };
-    
-            } catch (err) {
-                console.error("Delete Fetch Error:", err);
-                return { data: null, error: { message: "Something went wrong during deletion." } };
+        try {
+            const url = `${API_URL}/tutors/tutors-profile/user/${id}`; // ডাইরেক্ট স্ট্রিং ইন্টারপোলেশন
+
+            // Get cookies for authentication
+            const { cookies } = await import("next/headers"); // Importing inside the function to avoid issues in non-server contexts
+            const cookiestore = await cookies(); // Get the cookies store for send login user token or session in header for authentication 
+
+            const config: RequestInit = {
+                method: "PATCH", // <--- এটি অবশ্যই যোগ করতে হবে
+                credentials: 'include', // কুকি বা সেশন পাঠানোর জন্য
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookiestore.toString(),
+                },
+                body: JSON.stringify(updateData),
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
             }
-        },
+
+            // Next.js স্পেসিফিক ক্যাশ লজিক (যদি প্রয়োজন হয়)
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            // রিভ্যালিডেশনের জন্য ট্যাগ (যেমন: ডিলিট করার পর লিস্ট আপডেট হবে)
+            config.next = { ...config.next, tags: ["user"] };
+
+            const res = await fetch(url, config);
+
+            // যদি রেসপন্স ঠিক না থাকে (যেমন: ৪০১, ৪০৪ বা ৪০০ এরর)
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                return {
+                    data: null,
+                    error: { message: errorData.error || errorData.message || "Update failed" }
+                };
+            }
+
+            const data = await res.json();
+            return { data: data, error: null };
+
+        } catch (err) {
+            console.error("Delete Fetch Error:", err);
+            return { data: null, error: { message: "Something went wrong during deletion." } };
+        }
+    },
 
 
-     getSingleBookingTutorUserById: async function (id: string, options?: ServiceOptions) {
+    getSingleBookingTutorUserById: async function (id: string, options?: ServiceOptions) {
         try {
             const url = new URL(`${API_URL}/dashboard/booking/${id}`);
 
@@ -536,7 +583,7 @@ export const tutorService = {
     },
 
 
-     getSingleTutorAllReviewById: async function (id: string, options?: ServiceOptions) {
+    getSingleTutorAllReviewById: async function (id: string, options?: ServiceOptions) {
         try {
             const url = new URL(`${API_URL}/tutors/review/${id}`);
 

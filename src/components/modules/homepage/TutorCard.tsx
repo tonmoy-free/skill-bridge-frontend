@@ -10,6 +10,7 @@ import {
 import { TutorProfile } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
+import tutorImageDefault from "../../../../public/Image/defaultTutor.png"
 
 
 export function TutorCard({ post }: { post: TutorProfile }) {
@@ -59,3 +60,6 @@ export function TutorCard({ post }: { post: TutorProfile }) {
     </Card>
   )
 }
+
+// TutorCard.tsx
+

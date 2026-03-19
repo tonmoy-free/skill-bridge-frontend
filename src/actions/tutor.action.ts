@@ -1,7 +1,7 @@
 "use server";
 
 import { UserData } from "@/services/manageUser.service";
-import { CreateAvailabilityData, CreateTutorProfileData, ID, tutorService } from "@/services/tutor.service";
+import { CreateAvailabilityData, CreateTutorProfileData, GetTutorProfileParams, ID, tutorService } from "@/services/tutor.service";
 
 
 
@@ -20,8 +20,8 @@ export const getTutorProfileById = async (revalidate?: number) => {
     return await tutorService.getTutorProfileById({ revalidate });
 };
 
-export const getAllTutorProfile = async (revalidate?: number) => {
-    return await tutorService.getAllTutorProfile({ revalidate });
+export const getAllTutorProfile = async (revalidate?: number,par?: GetTutorProfileParams) => {
+    return await tutorService.getAllTutorProfile({ revalidate },par);
 };
 
 export const getAvailabilityById = async (id: any, revalidate?: number) => {

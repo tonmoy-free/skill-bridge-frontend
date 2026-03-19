@@ -36,7 +36,7 @@ export default function TutorProfileView({ profile }: { profile: any }) {
                     <div className="flex flex-col md:flex-row md:items-center gap-2">
                         <h1 className="text-3xl font-bold">{user.name}</h1>
                         <div className="flex items-center justify-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-sm font-bold">
-                            <Star size={16} className="fill-current" /> {totalRating.toFixed(1)}
+                            <Star size={16} className="fill-current" /> {totalRating?.toFixed(1)}
                         </div>
                         {user.emailVerified && (
                             <Badge variant="secondary" className="bg-blue-50 text-blue-600 border-blue-200">
